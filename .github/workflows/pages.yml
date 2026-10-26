@@ -20,6 +20,7 @@ jobs:
       - name: Install Godot 4.4.1 Web export templates
         run: |
           set -eu
+          apt-get update -qq && apt-get install -y -qq curl unzip ca-certificates
           TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/4.4.1.stable"
           mkdir -p "$TEMPLATE_DIR"
           if [ ! -f "$TEMPLATE_DIR/web_nothreads_release.zip" ]; then
