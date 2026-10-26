@@ -29,4 +29,8 @@ Read all nonempty cells, merged ranges and sheet dimensions (Лист1, 43 rows 
 | image(20261026-143156).png | Old browser perimeter/props iteration; baseline |
 | image(20261026-143403).png | Two art targets, same composition as image(9) |
 
-The package provides map screenshots, not a georeferenced orthoimage or CAD survey. The Yandex album was not downloaded into the package, and no additional photographs from it are claimed as reviewed. The public current Pages endpoint and GitHub Actions API returned proxy HTTP 403 in this cloud task; archived browser shots establish the visible baseline, and the new Web build was inspected locally in Chromium.
+The package provides map screenshots, not a georeferenced orthoimage or CAD survey. The Yandex album was not downloaded into the package, and no additional photographs from it are claimed as reviewed. During initial onboarding the Pages endpoint and Actions API returned proxy HTTP 403. Access was retested during revision 1.1.0 and now succeeds (HTTP 200 / Actions API read). Initial screenshots establish the 1.0.0 baseline; revision 1.1.0 is checked locally and publication is verified separately.
+
+## Уточнение владельца для MAP 1.1.0
+
+Следующее сообщение содержит старый игровой вид и новую разметку 2ГИС. Владелец прямо разъяснил: красные линии — заборы; зелёные — дороги; стрелки требуют обратить внимание; южный перечёркнутый квартал не рисовать. Эти сведения заменяют прежние предположения. Численная ручная трассировка новой разметки (поле `trace`, полилинии, координаты и развороты) сохранена в `data/site.json`. Сам новый PNG доступен в сообщении пользователя; копия его файла в репозитории не заявляется, поскольку вложение пришло как изображение чата без файлового идентификатора. Все 18 оригинальных PNG из ZIP по-прежнему сохранены.

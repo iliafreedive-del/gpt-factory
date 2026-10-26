@@ -1,41 +1,50 @@
-# Map 1.0.0 — sources and uncertainty
+# MAP 1.1.0 — привязка и достоверность
 
-Coordinates and dimensions are editable in `data/site.json`. X points right and Z down on the supplied top-down 2GIS plan. One unit is one metre. True north, elevations, cadastral limits and capacities are **not surveyed**. The board edge is a presentation device, not the property boundary.
+Одна единица Godot = один метр. Ваша последняя разметка имеет приоритет над прежней приблизительной расстановкой: **красное — ограждения; зелёное — дороги; стрелки — указания на объекты, не геометрия; перечёркнутый южный квартал не моделируется**.
 
-## Calibration, not a cadastral survey
+Все координаты зданий, их развороты, полилинии дорог/заборов, участки, исключённая территория, железная дорога, краны и позиции реквизита теперь находятся в `data/site.json`. В коде остаются только локальная геометрия повторно используемых объектов и презентационная подложка.
 
-`handoff/source/03_REFERENCES/image(6).png` shows cumulative ruler readings. Interpreted sequence: 0 → 12 → 50 → 80 → 129 → 143 → 192 → 200 m. It is a connected ruler path, **not** a list of building lengths. In particular 129/143/192 are not 129/143/192-m warehouses.
+## Калибровка разметки
 
-| Feature | Ruler difference | Pixel check on original PNG | Implemented footprint | Status |
-|---|---:|---:|---:|---|
-| Red warehouse length | 192−143 = 49 m | 307/49 = 6.27 px/m | 49 × 14 m | map-derived anchor, author tolerance ±2 m |
-| Red warehouse depth | 143−129 = 14 m | 87/14 = 6.21 px/m | same | independent perpendicular axis, within 0.9% |
-| LGC length | 50−12 = 38 m | 242/38 = 6.37 px/m | 38 × 12 m | map-derived, author tolerance ±2 m |
-| LGC depth | 12−0 = 12 m | 73/12 = 6.08 px/m | same | screenshot perspective/edge picking limits accuracy |
+Трассировка выполнена вручную по показанному изображению 1095×731. Начало координат — пиксель (300,280), цена — 2.45 px/m; X вправо, Z вниз. Независимые проверки: склад 120 px / 49 m = 2.449 px/m; ЛГЦ 92 px / 38 m = 2.421 px/m. Разница около 1.2%. Это опоры, а не геодезическая точность. Исходные 49×14 и 38×12 m получены из связанного линейного измерения на `handoff/source/03_REFERENCES/image(6).png`: 192−143, 143−129, 50−12, 12−0.
 
-Pixel measurements are approximate edge picks. ±2 m is a conservative modelling tolerance assigned by the author, **not** accuracy certified by 2GIS or the owner. LGC's independent axes differ about 4.7%; roof overhang and perspective are unresolved. The previous 51×19 / 62×22 m footprints were not retained as measured dimensions.
+Ручная трассировка центра имеет ориентировочную неопределённость около 2 m. Размеры остальных зданий — пропорциональные оценки, высоты — оценки по фото/типологии. Север, высотные отметки, кадастровые границы и вместимость не подтверждены.
 
-`image(7)` is oblique and used for adjacency and facade context, not a second metric scale. `image(8)` is an annotated boundary overview with cumulative, partly obscured readings; it does not justify a claimed exact site perimeter. No numeric site capacity or perimeter is presented.
+## Корпуса
 
-## Functional mapping
+Размеры ниже — в локальных осях здания. После разворота −90° цех 1 занимает 27 m с запада на восток и 44 m с севера на юг. Наклон восточного цеха −6° согласует длинные стороны с картой; контур представлен повёрнутым прямоугольником, мелкие отклонения стен требуют обмера.
 
-Excel is a functional topology, not a metric floor plan. Its complete cell text is retained in the original workbook. The scene preserves the principal relationships: rail and tree buffer north; zinc frames and retail staging north of red warehouse; LGC east of red warehouse; new shop south of LGC and third-party building south again; workshop 1 west of workshop 2; paint and sandblast on the west end of workshop 2; offices, spares and dealer dispatch south; black workshop to the east beyond container corridor. Sites and entrances are provisional proportional estimates. The main workshop silhouettes follow 2GIS, with functional sections sharing a building envelope where appropriate.
+| Объект | Локальный габарит, m | Разворот | Достоверность |
+|---|---:|---:|---|
+| Склад комплектующих | 49 × 14 × 6.5 | 0° | ОПОРА 2ГИС ±2 м |
+| ЛГЦ · лазер / гибка | 38 × 12 × 6.5 | 0° | ОПОРА 2ГИС ±2 м |
+| Новый цех · строительство | 38 × 13 × 7.5 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Стороннее здание | 39 × 20 × 7 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Цех 1 · сварка / сборка | 44 × 27 × 6.5 | -90° | ПО КАРТЕ · ОЦЕНКА |
+| Офис 1 · вход | 26 × 7 × 3.6 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Цех 2 · сборка | 47 × 13 × 5.8 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Офис 2 · продажи | 11 × 13 × 4 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Пескоструй | 10 × 10 × 5 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Малярка | 10 × 13 × 5.8 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Тентовый участок | 10 × 15 × 4 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Склад ЛГЦ → сварка | 9 × 5 × 3.5 | 0° | ПО КАРТЕ · ОЦЕНКА |
+| Чёрный цех · труборез / рамы на цинк | 108 × 94 × 9 | -6° | ПО КАРТЕ · ОЦЕНКА |
+| Корпус 6 · назначение не уточнено | 55 × 17 × 4.5 | -6° | ПО КАРТЕ · ОЦЕНКА |
+| Восточный корпус · назначение не уточнено | 12 × 26 × 4 | -6° | ПО КАРТЕ · ОЦЕНКА |
+| Восточный корпус · назначение не уточнено | 10 × 17 × 3.5 | -6° | ПО КАРТЕ · ОЦЕНКА |
 
-| Other footprints (m) | Source / confidence |
-|---|---|
-| New shop 38×13; third-party 39×20 | Excel adjacency, 2GIS proportions; photo verifies metal-clad gables, not dimensions |
-| Shop 1 45×23; shop 2 47×14 | 2GIS outline estimate; annex geometry and exact subdivision unverified |
-| Paint 16×14; blast 14×12; awning 9×10 | Excel process zones + 2GIS relative layout, estimates |
-| Offices 20×7 and 11×14 | Excel labels / map proportions, estimates |
-| Black workshop 29×44 | Excel eastern location and boundary overview, estimated footprint |
-| Garages 27×8 each; spares 26×8; LGC welding store 12×8; axes 10×6; mini-store 8×6 | Excel topology only, estimated |
-| Heights 3.5–8 m; roads 7–10 m | modelling assumptions; no measured clearances |
-| Trailer approximately 4.3×2.1 m overall, 2.9×1.7 m body | representative kit, not a factory SKU CAD model |
-| Rail gauge 1.52 m in this model | assumed Russian broad gauge; confirm onsite track layout and rail profile before logistics use |
-| Gantry rail spacing 25 m, span/height and placement | Excel confirms rails/loading zone; dimensions estimated |
+Малярка/сборка 2/офис 2 образуют вытянутый составной корпус с плоскими кровлями. Цех 1 развёрнут и имеет южный офисный торец. ЛГЦ, новый цех и стороннее красное здание сближены по карте; фото подтверждает обшитые фронтоны, а не голый каркас. Четырёхпролётная кровля чёрного цеха, высота и ритм фасадов являются архитектурными предположениями, поскольку подробной фотографии этого корпуса в архиве нет. Назначение трёх восточных вспомогательных корпусов не выдумано: оно обозначено как неуточнённое.
 
-## Field verification required
+Прежние отдельно нарисованные гаражи/мини-склады/склад запчастей не перенесены на произвольные новые места. Excel задаёт функции, но не доказывает наличие самостоятельных зданий внутри уточнённого контура; объекты на перечёркнутом соседнем квартале исключены. Их прежние идентификаторы и причина удаления сохранены в `excluded_legacy_buildings`.
 
-Confirm ruler-path interpretation against original 2GIS measurement session; survey exterior corners, heights and road clear widths; exact factory property/gate outline; new-shop footprint and current construction state; black-shop/garage locations; crane span and rail extent; rail gauge and access constraints; precise subzones inside the combined workshop envelopes; true north; trailer product envelopes and stock counts. Excel itself marks the far-west trailer storage mix as unknown; this remains explicitly unknown in the map.
+## Дороги, ограждения и краны
 
-There are no interior models and no calculated storage capacities. Selection, orbit, pan, zoom and focus are supported. E toggles a local sketch mode: select a building and move it in one-metre steps with the arrow keys. Collision, roof, batch instances and its label move together. These are temporary edits, reset on reload; permanent surveyed corrections belong in the central JSON.
+Дороги — полилинии, снятые с зелёных осей, с округлёнными поворотами. Ширины 3 m для узкого западного сервисного проезда, 5–5.5 m для подъездов, 6 m вокруг восточного корпуса и 7 m для основного выезда — оценки по доступным просветам. Повороты вокруг чёрного цеха дополнены промежуточными точками, чтобы дорожное полотно не срезало углы здания. Манёвры конкретных грузовиков/радиусы поворота ещё не рассчитаны.
+
+Ограждения заданы раздельными незамкнутыми полилиниями: внешний контур, граница двух участков, южная граница западной площадки и контейнерный двор. Красные диагональные зачёркивания не превращены в заборы. В ограждениях оставлены проёмы у КПП и въезда на восточный участок; открытые откатные створки не перекрывают проезжую часть. Положение и размеры ворот оценочные. На южном соседнем квартале нет зданий, товарных площадок или дорожной сетки завода — презентационная подложка вырезана на этом месте, это фон вне модели.
+
+Башенный кран на рельсовом ходу расположен у контейнеров, как на вашей стрелке; высота 23 m, стрела 35 m и колея хода 4 m оценочные. Козловой кран остаётся отдельным объектом погрузки на цинк из Excel, а не подменяет башенный. Железнодорожная линия следует северной границе; колея принята 1.52 m, реальное развитие путей нужно уточнить.
+
+## Что нужно подтвердить обмерами
+
+Углы стен и высоты; точное устройство кровель/фасадов чёрного цеха и обоих основных цехов; ширины и радиусы проездов; места ворот; параметры обоих кранов и путей; назначение малых восточных корпусов; фактические складские зоны и номенклатура западной площадки; истинный север. Все эти неизвестные остаются оценочными, а не выданы за измеренные значения. Интерьеров нет.

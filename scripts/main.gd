@@ -3,10 +3,11 @@ const Kit = preload("res://scripts/world/industrial_kit.gd")
 var site: Dictionary
 var kit
 var cam: Camera3D
-var focus := Vector3(-15,0,-8)
-var distance := 310.0
-var azimuth := 0.65
-var elevation := 0.85
+var plan_overlay: Node3D
+var focus := Vector3(95,0,25)
+var distance := 430.0
+var azimuth := 0.5
+var elevation := 0.95
 var dragging := false
 var panning := false
 var labels: Array[Label3D] = []
@@ -32,6 +33,7 @@ func _ready() -> void:
     for zone in site.zones: _zone(zone)
     _infrastructure()
     kit.finish()
+    _plan_overlay()
     _camera()
     _interface()
     _update_camera()
@@ -44,7 +46,7 @@ func _lighting() -> void:
     sun.shadow_enabled = true
     sun.shadow_bias = 0.06
     sun.shadow_normal_bias = 2.0
-    sun.directional_shadow_max_distance = 600
+    sun.directional_shadow_max_distance = 900
     sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
     add_child(sun)
     var world := WorldEnvironment.new()
@@ -58,27 +60,27 @@ func _lighting() -> void:
     world.environment = env
     add_child(world)
 
+func _points(values: Array) -> PackedVector2Array:
+    var result := PackedVector2Array()
+    for point in values: result.append(Vector2(point[0],point[1]))
+    return result
+
 func _grounds() -> void:
-    kit.box(Vector3(-15,-1.9,-7),Vector3(326,3.5,207),"#617573")
-    kit.box(Vector3(-15,-0.25,-7),Vector3(323,0.5,204),"#c8c2a4")
-    kit.box(Vector3(-29,0.015,-6),Vector3(259,0.04,161),"#b9b9a4")
-    kit.box(Vector3(106,0.025,22),Vector3(43,0.05,93),"#abb1a2")
-    kit.box(Vector3(-28,0.09,-87),Vector3(288,0.12,8),"#9ba77c")
-    kit.box(Vector3(140,0.09,0),Vector3(9,0.12,150),"#9ba77c")
-    # Separate paved circulation from gravel and storage aprons.
+    kit.board(_points(site.presentation_outline),3.8,"#b9bdac","#617573")
+    for parcel in site.parcels: kit.polygon(_points(parcel.points),0.025,parcel.color)
+    # The presentation board is cut away at the excluded southern neighbours;
+    # the exclusion polygon is data for checks only, never a rendered quarter.
     for r in site.roads:
-        kit.box(Vector3(r.x,0.06,r.z),Vector3(r.w+0.8,0.12,r.d+0.8),"#ded9bb")
-        kit.box(Vector3(r.x,0.13,r.z),Vector3(r.w,0.12,r.d),"#737f7c")
-        if r.w > r.d:
-            for i in range(int(r.w/9)):
-                kit.box(Vector3(r.x-r.w/2+3+i*9,0.2,r.z),Vector3(3,0.025,0.12),"#dad8b9")
-        else:
-            for i in range(int(r.d/9)):
-                kit.box(Vector3(r.x,0.2,r.z-r.d/2+3+i*9),Vector3(0.12,0.025,3),"#dad8b9")
-    # Purposeful concrete panel joints across the principal yards.
-    for x in range(-140,62,8):
-        kit.box(Vector3(x,0.08,-58),Vector3(0.05,0.03,36),"#a0a695")
-    for z in range(-77,-39,8): kit.box(Vector3(-40,0.08,z),Vector3(211,0.03,0.05),"#a0a695")
+        var points := _points(r.points)
+        kit.road(points,r.width)
+        if r.markings:
+            for i in range(points.size()-1):
+                var a := Vector3(points[i].x,0.14,points[i].y)
+                var b := Vector3(points[i+1].x,0.14,points[i+1].y)
+                var length := a.distance_to(b)
+                for j in range(int(length/10)):
+                    var at := a.lerp(b,(j*10.0+2)/length)
+                    kit.beam(at,at+(b-a).normalized()*2.7,0.09,"#d4d3b6")
 
 func _zone(z: Dictionary) -> void:
     var p := Vector3(z.x,0,z.z)
@@ -98,92 +100,77 @@ func _zone(z: Dictionary) -> void:
                 for col in range(maxi(1,int(z.w/5))):
                     for level in range(2): kit.trailer(p+Vector3(-z.w/2+2.5+col*5,level*0.18,-z.d/2+1.5+row*3),true)
         "containers":
-            for row in range(8):
+            for row in range(maxi(1,int(z.d/5))):
                 for col in range(2):
                     var colors := ["#b26043","#537a80","#be9855","#7e8d68"]
-                    kit.container(p+Vector3(-4+col*8,0,-19+row*5),colors[(row+col)%4])
+                    kit.container(p+Vector3(-4+col*8,0,-z.d/2+2.5+row*5),colors[(row+col)%4])
         "steel", "scrap":
             for i in range(12):
                 kit.box(p+Vector3((i%3)*3-3,0.3+(i%2)*0.2,(i/3)*3-4),Vector3(2.1,0.25,0.8),"#566c6d")
     _label(z.name,p+Vector3(0,1,0),false)
 
 func _infrastructure() -> void:
-    # Railway north of the site and two separate gantry running rails.
-    for z in [-96.76,-95.24]: kit.box(Vector3(-24,0.35,z),Vector3(285,0.18,0.10),"#59696c")
-    kit.box(Vector3(-24,0.07,-96),Vector3(288,0.12,4),"#8b9384")
-    for x in range(-165,120,2): kit.box(Vector3(x,0.2,-96),Vector3(0.24,0.16,2.7),"#716a53")
-    for z in [-77,-52]:
-        kit.box(Vector3(14,0.3,z),Vector3(90,0.17,0.1),"#647b7a")
-        for x in range(-30,60,3):kit.box(Vector3(x,0.2,z),Vector3(0.5,0.2,0.9),"#929889")
-    for x in [22,28]:
-        for z in [-77,-52]:
-            kit.box(Vector3(x,5.1,z),Vector3(0.45,10,0.6),"#b18440",Vector3(0,0,0.08 if x==22 else -0.08))
-            kit.box(Vector3(x,0.7,z),Vector3(2.4,0.65,0.9),"#586d6a")
-        kit.box(Vector3(x,10.1,-64.5),Vector3(0.6,0.8,27),"#d4ab54")
-    # Open twin-girder gantry, not a solid roof slab.
-    for z in range(-77,-50,3):
-        kit.box(Vector3(25,10.15,z),Vector3(6.2,0.25,0.18),"#c69a43")
-    for x in [21.6,28.4]:
-        kit.box(Vector3(x,10.7,-64.5),Vector3(0.07,0.07,27),"#e0bb68")
-        for z in range(-77,-50,3): kit.box(Vector3(x,10.35,z),Vector3(0.06,0.8,0.06),"#e0bb68")
-    kit.box(Vector3(25,10.4,-61),Vector3(5.5,0.2,1.6),"#b08b47")
-    kit.box(Vector3(25,10.1,-61),Vector3(2,1,2),"#586e73")
-    kit.box(Vector3(25,6.3,-61),Vector3(0.06,6.6,0.06),"#394f54")
-    kit.box(Vector3(25,2.9,-61),Vector3(0.5,0.4,0.5),"#bba058")
-    # Perimeter panels: deliberate open south gate, no road-obstructing fence.
-    var points: Array = site.boundary
-    for i in points.size():
-        var a := Vector3(points[i][0],0,points[i][1])
-        var b := Vector3(points[(i+1)%points.size()][0],0,points[(i+1)%points.size()][1])
-        var length := a.distance_to(b)
-        for j in range(int(length/3)+1):
-            var p := a.lerp(b,float(j)/maxf(1,float(int(length/3))))
-            if p.z > 71 and p.x > 50 and p.x < 68: continue
-            kit.box(p+Vector3(0,1.25,0),Vector3(0.13,2.5,0.13),"#536d67")
-            if j < int(length/3):
-                var dir := (b-a).normalized()
-                var center := p+dir*1.5
-                var yaw := atan2(-dir.z,dir.x)
-                for y in [0.5,1.3,2.1]: kit.box(center+Vector3(0,y,0),Vector3(3,0.055,0.06),"#7d9282",Vector3(0,yaw,0))
-                for k in range(6):kit.box(center+dir*(-1.3+k*0.5)+Vector3(0,1.3,0),Vector3(0.035,1.8,0.035),"#7d9282")
-    for x in [50,68]:
-        kit.box(Vector3(x,1.8,72),Vector3(0.6,3.6,0.6),"#c5bda0")
-    kit.box(Vector3(57,1.1,72),Vector3(12,0.18,0.18),"#d2b557")
-    kit.box(Vector3(72,1.4,67),Vector3(3.2,2.8,3),"#d4cfb4")
-    kit.box(Vector3(72,3,67),Vector3(3.6,0.2,3.4),"#547574")
-    kit.box(Vector3(72,1.7,68.55),Vector3(2.3,0.9,0.1),"#476c78")
-    # Buffer planted along railway; staggered trees, not scattered through logistics lanes.
-    for i in range(48): kit.tree(Vector3(-158+i*6,0,-87+(i%3)*1.2),i)
-    for i in range(27): kit.tree(Vector3(139+(i%2)*3,0,-65+i*5.2),i+2)
-    for i in range(18): kit.tree(Vector3(-165,0,-70+i*8),i)
-    # Yard furnishings and purposeful cargo staging.
-    for i in range(18): kit.pallet(Vector3(-15+(i%6)*1.7,0,-25+(i/6)*1.6))
-    for i in range(10): kit.pallet(Vector3(-75+(i%5)*1.6,0,42+(i/5)*1.6))
-    kit.forklift(Vector3(9,0,-55))
-    kit.forklift(Vector3(-77,0,24))
-    kit.forklift(Vector3(67,0,36))
-    for z in [-17,-10]:
-        for x in [53,55]: kit.box(Vector3(x,2.1,z),Vector3(0.12,4.2,0.12),"#aa895c")
-        for y in [0.5,2.1,3.7]: kit.box(Vector3(54,y,z),Vector3(2.2,0.1,0.1),"#bd9f6e")
-    for x in [53,55]:
-        for y in [1.1,3.2]: kit.box(Vector3(x,y,-13.5),Vector3(0.1,0.1,7),"#bd9f6e")
-    for z in [-21,-6]:
-        kit.box(Vector3(54,0.65,z),Vector3(3,0.35,0.3),"#d4b04c")
-        for x in [52.8,55.2]:kit.box(Vector3(x,0.45,z),Vector3(0.2,0.9,0.3),"#435c60")
-    kit.truck(Vector3(45,0,-23))
-    kit.truck(Vector3(-17,0,52))
-    for i in range(5): kit.container(Vector3(102,0,47+i*4),"#657f83" if i%2==0 else "#af7951")
-    # Lamps along main circulation, with offset booms.
-    for x in range(-139,70,28):
-        kit.box(Vector3(x,3.5,34),Vector3(0.16,7,0.16),"#526e70")
-        kit.box(Vector3(x,7,35),Vector3(0.14,0.14,2),"#526e70")
-        kit.box(Vector3(x,6.9,36),Vector3(0.7,0.2,0.4),"#d7dbbd")
-    # Bay hazard markings at the loading apron and gates.
-    for i in range(12): kit.box(Vector3(49+i*0.65,0.22,69),Vector3(0.28,0.03,3.2),"#e1bd58",Vector3(0,-0.6,0))
+    kit.railway(_points(site.rail.points),site.rail.gauge)
+    kit.gantry(site.gantry)
+    kit.tower_crane(site.tower_crane)
+    for fence in site.fences: kit.fence(_points(fence))
+    for leaf in site.open_gate_leaves: kit.fence(_points(leaf),1.9)
+    var checkpoint := Vector3(site.checkpoint.point[0],0,site.checkpoint.point[1])
+    kit.box(checkpoint+Vector3(0,1.4,0),Vector3(3.2,2.8,3),"#c7c5ae")
+    kit.box(checkpoint+Vector3(0,3,0),Vector3(3.7,0.2,3.5),"#657d78")
+    kit.box(checkpoint+Vector3(0,1.6,1.55),Vector3(2.2,1.0,0.08),"#4b6f79")
+    var gate := Vector3(site.checkpoint.gate[0],0,site.checkpoint.gate[1])
+    kit.box(gate+Vector3(4,0.9,0),Vector3(0.4,1.8,0.4),"#bdad74")
+    kit.beam(gate+Vector3(4,1.6,0),gate+Vector3(4,5.8,-3.5),0.16,"#d2b65b")
+    for line in site.tree_lines:
+        var points := _points(line.points)
+        for segment in range(points.size()-1):
+            var a := points[segment]
+            var b := points[segment+1]
+            var count := int(a.distance_to(b)/line.spacing)
+            for i in count:
+                var point := a.lerp(b,float(i)/maxi(1,count))
+                kit.tree(Vector3(point.x,0,point.y),i+segment)
+    for prop in site.props:
+        var at := Vector3(prop.point[0],0,prop.point[1])
+        match prop.kind:
+            "pallet":kit.pallet(at)
+            "truck":kit.truck(at)
+            "forklift":kit.forklift(at)
+            "steel":
+                for level in range(3): kit.box(at+Vector3(0,0.3+level*0.2,0),Vector3(5.5,0.14,1.2),"#657776")
+    # Lamps and small signs follow traced roads, not a rectangular invented grid.
+    for index in [0,2,3,5]:
+        var line: Dictionary = site.roads[index]
+        var points := _points(line.points)
+        for i in range(0,points.size(),2):
+            var p := Vector3(points[i].x+line.width/2+1,0,points[i].y)
+            kit.box(p+Vector3(0,3.5,0),Vector3(0.14,7,0.14),"#526e70")
+            kit.box(p+Vector3(-0.7,7,0),Vector3(1.5,0.14,0.14),"#526e70")
+            kit.box(p+Vector3(-1.3,6.9,0),Vector3(0.6,0.16,0.4),"#d7dbbd")
+
+func _plan_overlay() -> void:
+    plan_overlay = Node3D.new()
+    add_child(plan_overlay)
+    var overlay_kit = Kit.new(plan_overlay)
+    for fence in site.fences:
+        var points := _points(fence)
+        for i in range(points.size()-1):
+            overlay_kit.beam(Vector3(points[i].x,0.4,points[i].y),Vector3(points[i+1].x,0.4,points[i+1].y),0.5,"#d05c48")
+    for road in site.roads:
+        var points := _points(road.points)
+        for i in range(points.size()-1):
+            overlay_kit.beam(Vector3(points[i].x,0.2,points[i].y),Vector3(points[i+1].x,0.2,points[i+1].y),0.65,"#69bb61")
+    overlay_kit.finish()
+    for node in plan_overlay.get_children():
+        node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+        node.material_override.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+    plan_overlay.visible = false
 
 func _selectable(b: Dictionary) -> void:
     var body := StaticBody3D.new()
     body.position = Vector3(b.x,0,b.z)
+    body.rotation_degrees.y = b.get("rotation",0)
     body.set_meta("data",b)
     var plaque := Label3D.new()
     plaque.text = b.name.split(" · ")[0].to_upper()
@@ -224,14 +211,14 @@ func _label(caption: String, pos: Vector3, major: bool, primary: bool = false) -
 func _camera() -> void:
     cam = Camera3D.new()
     cam.projection = Camera3D.PROJECTION_ORTHOGONAL
-    cam.far = 1200
+    cam.far = 1800
     cam.near = 0.5
     cam.current = true
     add_child(cam)
 
 func _update_camera() -> void:
     if cam == null:return
-    cam.position = focus+Vector3(sin(azimuth)*cos(elevation),sin(elevation),cos(azimuth)*cos(elevation))*400
+    cam.position = focus+Vector3(sin(azimuth)*cos(elevation),sin(elevation),cos(azimuth)*cos(elevation))*650
     cam.look_at(focus)
     cam.size = distance
     for l in labels:
@@ -244,7 +231,7 @@ func _update_camera() -> void:
         scale_line.custom_minimum_size.x = px
         scale_line.size.x = px
     if OS.has_feature("web"):
-        var state := {"build":site.build,"map":site.map_version,"view":current_view,"labels":label_mode,"distance":distance,"selected":selected.get_meta("data").id if selected!=null else "","edit":edit_mode,"selected_x":selected.position.x if selected!=null else 0}
+        var state := {"build":site.build,"capture_frame":Engine.get_process_frames(),"map":site.map_version,"view":current_view,"labels":label_mode,"distance":distance,"selected":selected.get_meta("data").id if selected!=null else "","edit":edit_mode,"selected_x":selected.position.x if selected!=null else 0}
         var pick_points := {}
         for body in get_children():
             if body is StaticBody3D and body.has_meta("data"):
@@ -315,12 +302,14 @@ func _interface() -> void:
     _button(row,"ЛГЦ [2]",func(): _view(2))
     _button(row,"Двор [3]",func(): _view(3))
     _button(row,"Цеха [4]",func(): _view(4))
+    _button(row,"План [5]",func(): _view(5))
     var row2 := HBoxContainer.new()
     c.add_child(row2)
-    _button(row2,"−",func():distance=minf(380,distance*1.2);_update_camera())
+    _button(row2,"−",func():distance=minf(600,distance*1.2);_update_camera())
     _button(row2,"+",func():distance=maxf(18,distance/1.2);_update_camera())
     _button(row2,"Названия [L]",func():label_mode=not label_mode;_update_camera())
     _button(row2,"Сдвиг [E]",func():_toggle_edit())
+    _button(row2,"Восток [6]",func():_view(6))
     _text(c,"ПКМ: орбита   ·   СКМ / WASD: сдвиг   ·   колесо: масштаб",12)
     var info := _panel(layer,Control.PRESET_BOTTOM_RIGHT,Vector4(-418,-126,-20,-20),Color("#203940ed"))
     details_panel = info
@@ -336,13 +325,17 @@ func _interface() -> void:
 
 func _view(index: int) -> void:
     current_view = index
-    azimuth = 0.65
-    elevation = 0.85
+    plan_overlay.visible = index == 5
+    if index == 5: status.text = "План: красный — забор; зелёный — проезд\nЮжный перечёркнутый квартал исключён"
+    azimuth = 0.5
+    elevation = 0.95
     match index:
-        1: focus=Vector3(-15,0,-8);distance=310
-        2: focus=Vector3(28,0,-20);distance=85;elevation=0.65;azimuth=0.9
-        3: focus=Vector3(-27,0,-56);distance=115;elevation=0.75
-        4: focus=Vector3(-85,0,12);distance=125;azimuth=0.45
+        1: focus=Vector3(95,0,25);distance=430
+        2: focus=Vector3(36,0,-22);distance=94;elevation=0.65;azimuth=1.1
+        3: focus=Vector3(73,0,-30);distance=145;elevation=0.8;azimuth=0.5
+        4: focus=Vector3(-53,0,-1);distance=125;azimuth=0.35
+        5: focus=Vector3(96,0,25);distance=325;azimuth=0;elevation=1.565
+        6: focus=Vector3(193,0,52);distance=185;azimuth=0.35;elevation=0.95
     _update_camera()
 
 func _toggle_edit() -> void:
@@ -356,7 +349,7 @@ func _unhandled_input(event: InputEvent) -> void:
         if event.button_index == MOUSE_BUTTON_RIGHT: dragging=event.pressed
         if event.button_index == MOUSE_BUTTON_MIDDLE: panning=event.pressed
         if event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
-            distance=clampf(distance*(0.88 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1.12),18,380)
+            distance=clampf(distance*(0.88 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1.12),18,600)
             _update_camera()
         if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
             var origin := cam.project_ray_origin(event.position)
@@ -365,7 +358,7 @@ func _unhandled_input(event: InputEvent) -> void:
             if not hit.is_empty():
                 selected = hit.collider
                 var b: Dictionary = selected.get_meta("data")
-                status.text = "%s\n%.1f × %.1f м · %s\nИсточник: %s" % [b.name,b.w,b.d,b.confidence,"2ГИС, image(6)" if b.confidence.begins_with("MAP") else "оценка · Excel / 2ГИС"]
+                status.text = "%s\n%.1f × %.1f м · %s\nИсточник: %s" % [b.name,b.w,b.d,b.confidence,"2ГИС + ваша разметка" if b.id in ["red","lgc"] else "контур карты · оценка"]
                 _update_camera()
     if event is InputEventMouseMotion:
         if dragging:
@@ -376,7 +369,7 @@ func _unhandled_input(event: InputEvent) -> void:
             focus.y=0
         _update_camera()
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode in [KEY_1,KEY_2,KEY_3,KEY_4]: _view(event.keycode-KEY_1+1)
+        if event.keycode in [KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6]: _view(event.keycode-KEY_1+1)
         if event.keycode==KEY_L:label_mode=not label_mode;_update_camera()
         if event.keycode==KEY_F and selected!=null:focus=selected.position;distance=70;_update_camera()
         if event.keycode==KEY_E: _toggle_edit()
@@ -399,6 +392,7 @@ func _unhandled_input(event: InputEvent) -> void:
                 _update_camera()
 
 func _process(delta: float) -> void:
+    if OS.has_feature("web"): JavaScriptBridge.eval("window.factoryFrame="+str(Engine.get_process_frames()))
     var speed := distance*delta*0.5
     var shift := Vector3.ZERO
     if Input.is_key_pressed(KEY_W):shift.z-=speed

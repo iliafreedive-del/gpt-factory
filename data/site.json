@@ -1,457 +1,1245 @@
 {
-  "build": "1.0.0",
-  "map_version": "1.0.0",
+  "build": "1.1.0",
+  "map_version": "1.1.0",
   "units": "metres",
   "orientation": "Screen-up follows supplied 2GIS / Excel; true north unverified",
+  "trace": {
+    "source": "User clarification: red = fences, green = roads, arrows = attention; crossed southern parcel must not be drawn",
+    "origin_pixel": [
+      300,
+      280
+    ],
+    "pixels_per_metre": 2.45,
+    "pixel_size": [
+      1095,
+      731
+    ],
+    "warehouse_check": {
+      "pixels": 120,
+      "metres": 49,
+      "px_per_m": 2.4489795918367347
+    },
+    "lgc_check": {
+      "pixels": 92,
+      "metres": 38,
+      "px_per_m": 2.4210526315789473
+    },
+    "uncertainty": "Approximate manual tracing from displayed annotation. Not a survey or cadastral boundary."
+  },
   "buildings": [
     {
       "id": "red",
       "name": "Склад комплектующих",
-      "x": -43,
-      "z": -32,
+      "x": -28.98,
+      "z": -37.551,
       "w": 49,
       "d": 14,
       "h": 6.5,
       "style": "warehouse",
-      "color": "#a34e38",
-      "source": "2GIS image(6): cumulative 129→143→192 m; 307px/49m and 87px/14m",
-      "confidence": "MAP ANCHOR ±2m",
-      "rotation": 0
+      "color": "#a2523c",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; original image(6) connected ruler readings",
+      "confidence": "ОПОРА 2ГИС ±2 м",
+      "windows": false
     },
     {
       "id": "lgc",
       "name": "ЛГЦ · лазер / гибка",
-      "x": 32,
-      "z": -33,
+      "x": 36.327,
+      "z": -40.0,
       "w": 38,
       "d": 12,
       "h": 6.5,
       "style": "metal",
-      "color": "#abbfc2",
-      "source": "2GIS image(6): cumulative 0→12→50 m; 242px/38m and 73px/12m",
-      "confidence": "MAP ANCHOR ±2m",
-      "rotation": 0
+      "color": "#a7b8b9",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; original image(6) connected ruler readings",
+      "confidence": "ОПОРА 2ГИС ±2 м",
+      "windows": false
     },
     {
       "id": "new",
       "name": "Новый цех · строительство",
-      "x": 32,
-      "z": -13,
+      "x": 36.327,
+      "z": -25.918,
       "w": 38,
       "d": 13,
       "h": 7.5,
       "style": "construction",
-      "color": "#b5c7cb",
-      "source": "Photo image(10), adjacency from Excel / image(7); footprint estimated",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "color": "#b7c7c7",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "windows": false
     },
     {
       "id": "third",
       "name": "Стороннее здание",
-      "x": 32,
-      "z": 9,
+      "x": 36.327,
+      "z": -8.98,
       "w": 39,
       "d": 20,
       "h": 7,
       "style": "third",
-      "color": "#854b3b",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "color": "#814f41",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "windows": false
     },
     {
       "id": "shop1",
-      "name": "Цех 1 · заготовка / сварка / сборка",
-      "x": -121,
-      "z": 7,
-      "w": 45,
-      "d": 23,
-      "h": 6,
-      "style": "workshop",
-      "color": "#bdbaa5",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "name": "Цех 1 · сварка / сборка",
+      "x": -97.551,
+      "z": -6.122,
+      "w": 44,
+      "d": 27,
+      "h": 6.5,
+      "style": "masonry",
+      "color": "#b7ad94",
+      "rotation": -90,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_bays": 2
+    },
+    {
+      "id": "office1",
+      "name": "Офис 1 · вход",
+      "x": -97.551,
+      "z": 20.0,
+      "w": 26,
+      "d": 7,
+      "h": 3.6,
+      "style": "office",
+      "color": "#c5b396",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА"
     },
     {
       "id": "shop2",
       "name": "Цех 2 · сборка",
-      "x": -56,
-      "z": 7,
+      "x": -42.449,
+      "z": -4.082,
       "w": 47,
-      "d": 14,
-      "h": 6,
-      "style": "workshop",
-      "color": "#a7b5b0",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "paint",
-      "name": "Малярка",
-      "x": -89,
-      "z": 7,
-      "w": 16,
-      "d": 14,
-      "h": 6,
-      "style": "workshop",
-      "color": "#a1aaa2",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "blast",
-      "name": "Пескоструй",
-      "x": -90,
-      "z": -7,
-      "w": 14,
-      "d": 12,
-      "h": 5,
-      "style": "workshop",
+      "d": 13,
+      "h": 5.8,
+      "style": "masonry",
       "color": "#b1b1a0",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "awning",
-      "name": "Тентовый участок",
-      "x": -78,
-      "z": -8,
-      "w": 9,
-      "d": 10,
-      "h": 4,
-      "style": "awning",
-      "color": "#bfa67a",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_type": "flat"
     },
     {
       "id": "office2",
       "name": "Офис 2 · продажи",
-      "x": -27,
-      "z": 7,
+      "x": -13.265,
+      "z": -4.082,
       "w": 11,
-      "d": 14,
+      "d": 13,
       "h": 4,
       "style": "office",
-      "color": "#ded5b9",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "color": "#d4c4a7",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА"
     },
     {
-      "id": "office1",
-      "name": "Офис 1",
-      "x": -119,
-      "z": 23,
-      "w": 20,
-      "d": 7,
-      "h": 3.8,
-      "style": "office",
-      "color": "#d5c6aa",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "id": "blast",
+      "name": "Пескоструй",
+      "x": -71.02,
+      "z": -16.327,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "style": "masonry",
+      "color": "#aaa796",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_type": "flat"
+    },
+    {
+      "id": "paint",
+      "name": "Малярка",
+      "x": -71.02,
+      "z": -4.082,
+      "w": 10,
+      "d": 13,
+      "h": 5.8,
+      "style": "masonry",
+      "color": "#b1b1a0",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_type": "flat"
+    },
+    {
+      "id": "awning",
+      "name": "Тентовый участок",
+      "x": -58.367,
+      "z": -18.082,
+      "w": 10,
+      "d": 15,
+      "h": 4,
+      "style": "awning",
+      "color": "#c6ad77",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "windows": false
     },
     {
       "id": "weldstore",
       "name": "Склад ЛГЦ → сварка",
-      "x": -101,
-      "z": -21,
-      "w": 12,
-      "d": 8,
+      "x": -78.367,
+      "z": -33.469,
+      "w": 9,
+      "d": 5,
       "h": 3.5,
       "style": "warehouse",
-      "color": "#81938c",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "axes",
-      "name": "Оси / трапы",
-      "x": -87,
-      "z": 26,
-      "w": 10,
-      "d": 6,
-      "h": 3.5,
-      "style": "warehouse",
-      "color": "#8d998f",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "parts",
-      "name": "Склад запчастей",
-      "x": -72,
-      "z": 57,
-      "w": 26,
-      "d": 8,
-      "h": 4,
-      "style": "warehouse",
-      "color": "#afab98",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "mini",
-      "name": "Мини-склад",
-      "x": -20,
-      "z": 31,
-      "w": 8,
-      "d": 6,
-      "h": 3.5,
-      "style": "warehouse",
-      "color": "#a8b2a0",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "garage1",
-      "name": "Гаражи · север",
-      "x": 35,
-      "z": 31,
-      "w": 27,
-      "d": 8,
-      "h": 4,
-      "style": "garage",
-      "color": "#8d9b94",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
-    },
-    {
-      "id": "garage2",
-      "name": "Гаражи · юг",
-      "x": 35,
-      "z": 57,
-      "w": 27,
-      "d": 8,
-      "h": 4,
-      "style": "garage",
-      "color": "#8d9b94",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "color": "#83968d",
+      "rotation": 0,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "windows": false
     },
     {
       "id": "black",
       "name": "Чёрный цех · труборез / рамы на цинк",
-      "x": 104,
-      "z": 8,
-      "w": 29,
-      "d": 44,
-      "h": 8,
+      "x": 192.653,
+      "z": 51.837,
+      "w": 108,
+      "d": 94,
+      "h": 9,
       "style": "black",
-      "color": "#465b5d",
-      "source": "Excel functional position; 2GIS proportional estimate",
-      "confidence": "PRELIMINARY",
-      "rotation": 0
+      "color": "#637271",
+      "rotation": -6,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_bays": 4
+    },
+    {
+      "id": "black_annex",
+      "name": "Корпус 6 · назначение не уточнено",
+      "x": 178.776,
+      "z": 116.735,
+      "w": 55,
+      "d": 17,
+      "h": 4.5,
+      "style": "masonry",
+      "color": "#b3ab95",
+      "rotation": -6,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_type": "flat"
+    },
+    {
+      "id": "east_aux1",
+      "name": "Восточный корпус · назначение не уточнено",
+      "x": 271.02,
+      "z": 53.469,
+      "w": 12,
+      "d": 26,
+      "h": 4,
+      "style": "masonry",
+      "color": "#a5a798",
+      "rotation": -6,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_type": "flat"
+    },
+    {
+      "id": "east_aux2",
+      "name": "Восточный корпус · назначение не уточнено",
+      "x": 266.939,
+      "z": 77.551,
+      "w": 10,
+      "d": 17,
+      "h": 3.5,
+      "style": "masonry",
+      "color": "#a5a798",
+      "rotation": -6,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_type": "flat"
     }
   ],
   "zones": [
     {
       "name": "Рамы → цинк",
-      "x": -91,
-      "z": -65,
-      "w": 27,
-      "d": 24,
+      "x": -57.143,
+      "z": -68.163,
+      "w": 24,
+      "d": 21,
       "kind": "frames"
     },
     {
       "name": "Айвазовского · розница",
-      "x": -44,
-      "z": -64,
-      "w": 44,
-      "d": 17,
+      "x": -20.0,
+      "z": -64.898,
+      "w": 38,
+      "d": 14,
       "kind": "trailers"
     },
     {
       "name": "Молокова · готовые",
-      "x": -6,
-      "z": -47,
+      "x": 20.408,
+      "z": -59.184,
+      "w": 33,
+      "d": 11,
+      "kind": "trailers"
+    },
+    {
+      "name": "Погрузка на цинк",
+      "x": 41.633,
+      "z": -67.347,
+      "w": 28,
+      "d": 23,
+      "kind": "crane"
+    },
+    {
+      "name": "Контейнерщики",
+      "x": 100.816,
+      "z": -25.714,
+      "w": 17,
+      "d": 65,
+      "kind": "containers"
+    },
+    {
+      "name": "Ожидание пескоструя",
+      "x": -62.857,
+      "z": -40.408,
+      "w": 8,
+      "d": 15,
+      "kind": "frames"
+    },
+    {
+      "name": "Клиенты · с колёс",
+      "x": -28.98,
+      "z": -26.939,
+      "w": 36,
+      "d": 5,
+      "kind": "trailers"
+    },
+    {
+      "name": "Клиенты · выдача",
+      "x": -30.204,
+      "z": -14.694,
+      "w": 28,
+      "d": 5,
+      "kind": "trailers"
+    },
+    {
+      "name": "Окрашенные → сборка",
+      "x": -34.286,
+      "z": 7.755,
+      "w": 30,
+      "d": 5,
+      "kind": "frames"
+    },
+    {
+      "name": "Отправка дилерам",
+      "x": -21.224,
+      "z": 28.571,
       "w": 28,
       "d": 9,
       "kind": "trailers"
     },
     {
-      "name": "Погрузка на цинк",
-      "x": 34,
-      "z": -65,
-      "w": 42,
-      "d": 20,
-      "kind": "crane"
-    },
-    {
-      "name": "Контейнерщики",
-      "x": 73,
-      "z": -53,
-      "w": 16,
-      "d": 45,
-      "kind": "containers"
-    },
-    {
-      "name": "Ожидание пескоструя",
-      "x": -91,
-      "z": -38,
-      "w": 13,
-      "d": 14,
-      "kind": "frames"
-    },
-    {
-      "name": "Окрашенные → сборка",
-      "x": -65,
-      "z": 31,
-      "w": 31,
-      "d": 12,
-      "kind": "frames"
-    },
-    {
-      "name": "Клиенты · с колёс",
-      "x": -45,
-      "z": -10,
-      "w": 37,
-      "d": 8,
-      "kind": "trailers"
-    },
-    {
-      "name": "Клиенты · выдача",
-      "x": -45,
-      "z": 24,
-      "w": 36,
-      "d": 8,
-      "kind": "trailers"
-    },
-    {
-      "name": "Отправка дилерам",
-      "x": -35,
-      "z": 51,
-      "w": 34,
-      "d": 17,
-      "kind": "trailers"
-    },
-    {
-      "name": "Готовые · южная площадка",
-      "x": 24,
-      "z": 47,
-      "w": 30,
-      "d": 7,
-      "kind": "trailers"
-    },
-    {
       "name": "Ремонт / брак",
-      "x": -123,
-      "z": -28,
-      "w": 18,
-      "d": 14,
+      "x": -91.02,
+      "z": -45.306,
+      "w": 19,
+      "d": 13,
       "kind": "scrap"
     },
     {
-      "name": "Металл / приёмка",
-      "x": -147,
-      "z": 5,
-      "w": 13,
-      "d": 32,
-      "kind": "steel"
-    },
-    {
       "name": "Номенклатура не уточнена · Excel A4/C4",
-      "x": -131,
-      "z": -61,
-      "w": 30,
-      "d": 22,
+      "x": -88.163,
+      "z": -71.429,
+      "w": 21,
+      "d": 20,
       "kind": "trailers"
     }
   ],
   "roads": [
     {
-      "x": -38,
-      "z": 39,
-      "w": 227,
-      "d": 9
+      "id": "west_access",
+      "points": [
+        [
+          -87.347,
+          25.714
+        ],
+        [
+          -79.592,
+          24.49
+        ],
+        [
+          -73.469,
+          19.592
+        ],
+        [
+          -77.143,
+          7.755
+        ],
+        [
+          -78.776,
+          -3.673
+        ],
+        [
+          -79.184,
+          -13.061
+        ],
+        [
+          -78.776,
+          -24.082
+        ],
+        [
+          -69.796,
+          -29.388
+        ],
+        [
+          -51.429,
+          -28.98
+        ],
+        [
+          -43.673,
+          -22.449
+        ],
+        [
+          -6.531,
+          -20.408
+        ],
+        [
+          4.898,
+          -20.816
+        ],
+        [
+          9.796,
+          -11.837
+        ],
+        [
+          11.429,
+          15.51
+        ]
+      ],
+      "width": 3.0,
+      "markings": false,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; narrow 3m service lane estimated, clear widths unmeasured"
     },
     {
-      "x": -6,
-      "z": 0,
-      "w": 10,
-      "d": 90
+      "id": "west_north_spur",
+      "points": [
+        [
+          -69.796,
+          -29.388
+        ],
+        [
+          -67.755,
+          -68.98
+        ]
+      ],
+      "width": 5,
+      "markings": false,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; width estimated"
     },
     {
-      "x": -76,
-      "z": -20,
-      "w": 144,
-      "d": 8
+      "id": "factory_south",
+      "points": [
+        [
+          -73.469,
+          19.592
+        ],
+        [
+          -11.429,
+          20.0
+        ],
+        [
+          60.0,
+          17.959
+        ],
+        [
+          68.98,
+          17.959
+        ],
+        [
+          77.143,
+          22.041
+        ],
+        [
+          84.898,
+          32.245
+        ],
+        [
+          88.163,
+          44.898
+        ],
+        [
+          91.837,
+          62.041
+        ],
+        [
+          103.673,
+          71.837
+        ],
+        [
+          113.469,
+          84.49
+        ],
+        [
+          113.469,
+          162.857
+        ],
+        [
+          118.367,
+          168.163
+        ],
+        [
+          128.163,
+          166.122
+        ]
+      ],
+      "width": 7,
+      "markings": true,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; width estimated"
     },
     {
-      "x": 59,
-      "z": 0,
-      "w": 9,
-      "d": 135
+      "id": "lgc_access",
+      "points": [
+        [
+          66.531,
+          15.918
+        ],
+        [
+          66.531,
+          -2.449
+        ],
+        [
+          67.755,
+          -19.184
+        ],
+        [
+          71.429,
+          -34.286
+        ],
+        [
+          82.857,
+          -55.918
+        ],
+        [
+          86.939,
+          -62.857
+        ]
+      ],
+      "width": 5.5,
+      "markings": false,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; width estimated"
     },
     {
-      "x": -153,
-      "z": -5,
-      "w": 8,
-      "d": 104
+      "id": "main_connection",
+      "points": [
+        [
+          11.429,
+          15.51
+        ],
+        [
+          58.776,
+          15.918
+        ],
+        [
+          68.98,
+          17.959
+        ]
+      ],
+      "width": 6,
+      "markings": false,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; width estimated"
     },
     {
-      "x": -40,
-      "z": -83,
-      "w": 228,
-      "d": 7
+      "id": "black_entry",
+      "points": [
+        [
+          113.469,
+          133.061
+        ],
+        [
+          127.347,
+          133.469
+        ]
+      ],
+      "width": 7,
+      "markings": false,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; width estimated"
     },
     {
-      "x": 80,
-      "z": 65,
-      "w": 135,
-      "d": 10
-    },
-    {
-      "x": 126,
-      "z": 4,
-      "w": 8,
-      "d": 125
+      "id": "black_loop",
+      "points": [
+        [
+          127.347,
+          133.469
+        ],
+        [
+          128.98,
+          89.796
+        ],
+        [
+          130.204,
+          44.898
+        ],
+        [
+          135.51,
+          8.571
+        ],
+        [
+          137.959,
+          -2.041
+        ],
+        [
+          141.224,
+          -4.49
+        ],
+        [
+          174.694,
+          -2.041
+        ],
+        [
+          231.837,
+          2.857
+        ],
+        [
+          248.571,
+          4.49
+        ],
+        [
+          259.592,
+          13.878
+        ],
+        [
+          259.184,
+          38.367
+        ],
+        [
+          256.327,
+          69.796
+        ],
+        [
+          248.571,
+          95.918
+        ],
+        [
+          247.347,
+          105.714
+        ],
+        [
+          242.041,
+          110.204
+        ],
+        [
+          222.449,
+          113.469
+        ],
+        [
+          216.327,
+          120.0
+        ],
+        [
+          211.429,
+          132.245
+        ],
+        [
+          199.592,
+          137.551
+        ],
+        [
+          162.449,
+          133.878
+        ],
+        [
+          139.184,
+          131.02
+        ],
+        [
+          127.347,
+          133.469
+        ]
+      ],
+      "width": 6,
+      "markings": false,
+      "source": "Green road centreline on user annotated 2GIS",
+      "confidence": "Trace ±2m; width estimated"
     }
   ],
-  "boundary": [
+  "fences": [
     [
-      -160,
-      -88
+      [
+        -111.02,
+        -103.673
+      ],
+      [
+        122.857,
+        -79.184
+      ],
+      [
+        113.061,
+        10.204
+      ],
+      [
+        111.837,
+        26.939
+      ]
     ],
     [
-      86,
-      -88
+      [
+        111.837,
+        42.449
+      ],
+      [
+        110.204,
+        52.245
+      ],
+      [
+        118.367,
+        66.531
+      ],
+      [
+        118.776,
+        127.347
+      ]
     ],
     [
-      86,
-      -25
+      [
+        118.776,
+        139.592
+      ],
+      [
+        118.776,
+        150.204
+      ]
     ],
     [
-      128,
-      -25
+      [
+        -111.02,
+        -103.673
+      ],
+      [
+        -113.469,
+        -31.429
+      ]
     ],
     [
-      128,
-      72
+      [
+        -113.469,
+        27.347
+      ],
+      [
+        -113.469,
+        40.816
+      ],
+      [
+        83.265,
+        40.816
+      ]
     ],
     [
-      -160,
-      72
+      [
+        93.878,
+        40.816
+      ],
+      [
+        111.837,
+        40.0
+      ],
+      [
+        111.837,
+        42.449
+      ]
+    ],
+    [
+      [
+        122.857,
+        -79.184
+      ],
+      [
+        272.653,
+        -63.673
+      ],
+      [
+        262.449,
+        37.143
+      ],
+      [
+        270.612,
+        37.143
+      ],
+      [
+        318.776,
+        83.265
+      ],
+      [
+        205.306,
+        150.204
+      ],
+      [
+        118.776,
+        150.204
+      ]
+    ],
+    [
+      [
+        89.796,
+        -61.633
+      ],
+      [
+        114.286,
+        -61.633
+      ],
+      [
+        113.469,
+        10.204
+      ],
+      [
+        89.796,
+        10.204
+      ],
+      [
+        89.796,
+        -61.633
+      ]
     ]
   ],
+  "parcels": [
+    {
+      "id": "west",
+      "points": [
+        [
+          -111.02,
+          -103.673
+        ],
+        [
+          122.857,
+          -79.184
+        ],
+        [
+          111.837,
+          40.0
+        ],
+        [
+          75.918,
+          40.816
+        ],
+        [
+          -104.49,
+          40.816
+        ],
+        [
+          -113.469,
+          27.347
+        ],
+        [
+          -113.469,
+          -31.429
+        ]
+      ],
+      "color": "#bcb9a1"
+    },
+    {
+      "id": "east",
+      "points": [
+        [
+          122.857,
+          -79.184
+        ],
+        [
+          272.653,
+          -63.673
+        ],
+        [
+          262.449,
+          37.143
+        ],
+        [
+          270.612,
+          37.143
+        ],
+        [
+          318.776,
+          83.265
+        ],
+        [
+          205.306,
+          150.204
+        ],
+        [
+          118.776,
+          150.204
+        ],
+        [
+          118.776,
+          68.98
+        ],
+        [
+          111.837,
+          60.408
+        ]
+      ],
+      "color": "#b3b6a3"
+    }
+  ],
+  "excluded_areas": [
+    {
+      "id": "southern_neighbours",
+      "points": [
+        [
+          -104.49,
+          40.816
+        ],
+        [
+          75.918,
+          40.816
+        ],
+        [
+          75.918,
+          148.571
+        ],
+        [
+          -104.49,
+          148.571
+        ]
+      ],
+      "reason": "User explicitly: НЕ РИСУЙ ЭТО НЕ НАШЕ"
+    }
+  ],
   "rail": {
-    "x": -30,
-    "z": -96,
-    "length": 280
+    "points": [
+      [
+        -99.184,
+        -111.02
+      ],
+      [
+        278.367,
+        -69.388
+      ]
+    ],
+    "gauge": 1.52
   },
+  "gantry": {
+    "center": [
+      36.327,
+      -70.204
+    ],
+    "travel": 75,
+    "span": 18,
+    "height": 9
+  },
+  "tower_crane": {
+    "center": [
+      109.388,
+      -27.347
+    ],
+    "rail_start": [
+      109.388,
+      -58.367
+    ],
+    "rail_end": [
+      109.388,
+      5.714
+    ],
+    "height": 23,
+    "boom": 35
+  },
+  "checkpoint": {
+    "point": [
+      97.551,
+      34.286
+    ],
+    "gate": [
+      88.98,
+      40.0
+    ]
+  },
+  "props": [
+    {
+      "kind": "pallet",
+      "point": [
+        0.0,
+        -38.776
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        1.633,
+        -38.776
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        3.265,
+        -38.776
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        4.898,
+        -38.776
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        0.0,
+        -37.143
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        1.633,
+        -37.143
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        3.265,
+        -37.143
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        4.898,
+        -37.143
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        0.0,
+        -35.51
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        1.633,
+        -35.51
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        3.265,
+        -35.51
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        4.898,
+        -35.51
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -56.327,
+        9.796
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -54.694,
+        9.796
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -53.061,
+        9.796
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -51.429,
+        9.796
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -56.327,
+        11.429
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -54.694,
+        11.429
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -53.061,
+        11.429
+      ]
+    },
+    {
+      "kind": "pallet",
+      "point": [
+        -51.429,
+        11.429
+      ]
+    },
+    {
+      "kind": "forklift",
+      "point": [
+        56.327,
+        -55.51
+      ]
+    },
+    {
+      "kind": "forklift",
+      "point": [
+        -1.633,
+        7.755
+      ]
+    },
+    {
+      "kind": "forklift",
+      "point": [
+        217.143,
+        117.143
+      ]
+    },
+    {
+      "kind": "truck",
+      "point": [
+        61.224,
+        -32.653
+      ]
+    },
+    {
+      "kind": "truck",
+      "point": [
+        -4.082,
+        27.755
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        151.02,
+        101.082
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        159.184,
+        101.082
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        167.347,
+        101.082
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        175.51,
+        101.082
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        183.673,
+        101.082
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        151.02,
+        103.122
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        159.184,
+        103.122
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        167.347,
+        103.122
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        175.51,
+        103.122
+      ]
+    },
+    {
+      "kind": "steel",
+      "point": [
+        183.673,
+        103.122
+      ]
+    }
+  ],
+  "tree_lines": [
+    {
+      "points": [
+        [
+          -101.224,
+          -94.286
+        ],
+        [
+          80.0,
+          -74.694
+        ]
+      ],
+      "spacing": 7
+    },
+    {
+      "points": [
+        [
+          282.449,
+          102.857
+        ],
+        [
+          216.735,
+          145.306
+        ]
+      ],
+      "spacing": 8
+    }
+  ],
   "anchors": [
     {
       "source": "image(6).png",
@@ -465,5 +1253,92 @@
       "pixels": 87,
       "metres": 14
     }
-  ]
+  ],
+  "excluded_legacy_buildings": [
+    {
+      "id": "garage1",
+      "reason": "Former unsupported standalone placement removed; no new buildings in excluded southern parcel. Excel functional zones do not alone establish exterior roof positions."
+    },
+    {
+      "id": "garage2",
+      "reason": "Former unsupported standalone placement removed; no new buildings in excluded southern parcel. Excel functional zones do not alone establish exterior roof positions."
+    },
+    {
+      "id": "axes",
+      "reason": "Former unsupported standalone placement removed; no new buildings in excluded southern parcel. Excel functional zones do not alone establish exterior roof positions."
+    },
+    {
+      "id": "mini",
+      "reason": "Former unsupported standalone placement removed; no new buildings in excluded southern parcel. Excel functional zones do not alone establish exterior roof positions."
+    },
+    {
+      "id": "parts",
+      "reason": "Former unsupported standalone placement removed; no new buildings in excluded southern parcel. Excel functional zones do not alone establish exterior roof positions."
+    }
+  ],
+  "presentation_outline": [
+    [
+      -127.347,
+      -120.408
+    ],
+    [
+      285.714,
+      -75.51
+    ],
+    [
+      276.327,
+      28.571
+    ],
+    [
+      333.469,
+      83.673
+    ],
+    [
+      211.02,
+      164.898
+    ],
+    [
+      140.0,
+      177.959
+    ],
+    [
+      102.857,
+      177.959
+    ],
+    [
+      79.592,
+      75.102
+    ],
+    [
+      79.184,
+      46.939
+    ],
+    [
+      -127.347,
+      46.939
+    ]
+  ],
+  "open_gate_leaves": [
+    [
+      [
+        119.184,
+        127.347
+      ],
+      [
+        119.184,
+        120.816
+      ]
+    ],
+    [
+      [
+        119.184,
+        139.592
+      ],
+      [
+        119.184,
+        146.122
+      ]
+    ]
+  ],
+  "gate_note": "Gate gaps at KPP and eastern-yard entry are estimated from road widths; no fence crosses a traced driveable route."
 }

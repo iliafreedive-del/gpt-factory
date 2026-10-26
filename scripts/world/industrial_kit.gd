@@ -13,6 +13,7 @@ func material(hex: String) -> StandardMaterial3D:
         var m := StandardMaterial3D.new()
         m.albedo_color = Color(hex)
         m.roughness = 0.87
+        m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
         if hex in ["#737f7c", "#c8c2a4", "#b9b9a4", "#c7c8b2"]:
             var image := Image.create(64,64,false,Image.FORMAT_RGB8)
             var rng := RandomNumberGenerator.new()
@@ -32,7 +33,7 @@ func material(hex: String) -> StandardMaterial3D:
 func box(pos: Vector3, size: Vector3, color: String, rotation: Vector3 = Vector3.ZERO) -> void:
     var key := color + "box"
     if not batches.has(key): batches[key] = {"mesh": BoxMesh.new(), "color": color, "transforms": []}
-    var basis := Basis.from_euler(rotation).scaled(size)
+    var basis := Basis.from_euler(rotation)*Basis.from_scale(size)
     batches[key].transforms.append(Transform3D(basis, pos))
 
 func wheel(pos: Vector3, radius: float = 0.34) -> void:
@@ -47,6 +48,17 @@ func wheel(pos: Vector3, radius: float = 0.34) -> void:
     batches[key].transforms.append(Transform3D(Basis.from_euler(Vector3(PI/2,0,0)).scaled(Vector3(radius,radius,0.20)),pos))
     box(pos+Vector3(0,0,0.12),Vector3(radius*0.75,radius*0.75,0.05),"#b4c0bf")
 
+func cylinder(pos: Vector3, radius: float, height: float, color: String) -> void:
+    var key := color+"cylinder"
+    if not batches.has(key):
+        var mesh := CylinderMesh.new()
+        mesh.top_radius=1
+        mesh.bottom_radius=1
+        mesh.height=1
+        mesh.radial_segments=16
+        batches[key]={"mesh":mesh,"color":color,"transforms":[]}
+    batches[key].transforms.append(Transform3D(Basis.from_scale(Vector3(radius,height,radius)),pos))
+
 func finish() -> void:
     for entry in batches.values():
         var mm := MultiMesh.new()
@@ -59,6 +71,8 @@ func finish() -> void:
         node.material_override = material(entry.color)
         root.add_child(node)
         entry["node"] = node
+        if entry.color in ["#82989a", "#acb5a8"]:
+            node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func roof(center: Vector3, w: float, d: float, rise: float, color: String) -> void:
     # Closed triangular gable: no intersecting tilted slabs or roof gaps.
@@ -86,7 +100,7 @@ func building(b: Dictionary) -> void:
     var start_counts := {}
     for key in batches: start_counts[key] = batches[key].transforms.size()
     var child_start := root.get_child_count()
-    var p := Vector3(b.x,0,b.z)
+    var p := Vector3.ZERO
     var w: float = b.w
     var d: float = b.d
     var h: float = b.h
@@ -95,50 +109,75 @@ func building(b: Dictionary) -> void:
     box(p+Vector3(0,0.15,0),Vector3(w+1.2,0.3,d+1.2),"#8c9690")
     box(p+Vector3(0,h/2,0),Vector3(w,h,d),color)
     box(p+Vector3(0,0.5,0),Vector3(w+0.1,0.8,d+0.1),"#7f8984")
-    if office:
-        box(p+Vector3(0,h+0.15,0),Vector3(w+0.7,0.3,d+0.7),"#566967")
-    elif b.style == "awning":
-        roof(p+Vector3(0,h,0),w+0.8,d+0.8,1.0,"#d2bb88")
+    if office or b.get("roof_type","") == "flat":
+        box(p+Vector3(0,h+0.15,0),Vector3(w+0.5,0.3,d+0.5),"#6e7770")
+        for side in [-1,1]: box(p+Vector3(0,h+0.4,side*d/2),Vector3(w,0.5,0.18),color)
+        for x in range(maxi(1,int(w/13))):
+            box(p+Vector3(-w/2+5+x*13,h+0.4,0),Vector3(1.8,0.5,1.5),"#b6c1b4")
+            box(p+Vector3(-w/2+5+x*13,h+0.7,0),Vector3(1.4,0.15,1.1),"#6e8585")
     else:
-        var rise: float = minf(2.3,d*0.16)
-        roof(p+Vector3(0,h,0),w+0.8,d+0.8,rise,"#718b8f" if b.style != "warehouse" and b.style != "third" else "#9a4834")
-        box(p+Vector3(0,h+rise+0.08,0),Vector3(w+0.9,0.14,0.22),"#d2d9ce")
-        # Roof standing seams and skylight strips.
-        for x in range(int(w/2.2)):
-            for side in [-1.0,1.0]:
-                var slope: float = atan2(rise,d/2)
-                box(p+Vector3(-w/2+1+x*2.2,h+rise/2+0.11,side*d/4),Vector3(0.045,0.05,sqrt(d*d/4+rise*rise)),"#96aaab",Vector3(side*slope,0,0))
-        if b.style != "third":
-            for x in range(int(w/12)):
-                box(p+Vector3(-w/2+6+x*12,h+rise*0.65+0.16,-d*0.18),Vector3(3.8,0.12,1.4),"#c9e0d9",Vector3(-atan2(rise,d/2),0,0))
+        var bays: int = b.get("roof_bays",1)
+        var bay_depth: float = d/bays
+        var rise: float = minf(2.4,bay_depth*0.16)
+        var roof_color: String = "#71878a" if b.style not in ["warehouse","third"] else "#8b4d3b"
+        if b.style == "awning": roof_color = "#bda776"
+        for bay in range(bays):
+            var center_z: float = -d/2+bay_depth*(bay+0.5)
+            roof(p+Vector3(0,h,center_z),w+0.7,bay_depth+0.3,rise,roof_color)
+            box(p+Vector3(0,h+rise+0.06,center_z),Vector3(w+0.7,0.1,0.18),"#acb5a8")
+            for x in range(int(w/3)):
+                for side in [-1,1]:
+                    var slope: float = atan2(rise,bay_depth/2)
+                    # Local rotation must precede dimension scaling: the old global-axis
+                    # scaling skewed roof seams and caused the triangular shadow streaks.
+                    box(p+Vector3(-w/2+1+x*3,h+rise/2+0.07,center_z+side*bay_depth/4),Vector3(0.035,0.035,sqrt(bay_depth*bay_depth/4+rise*rise)),"#82989a",Vector3(side*slope,0,0))
+            if b.style in ["black","masonry"]:
+                for x in range(int(w/18)):
+                    box(p+Vector3(-w/2+9+x*18,h+rise*0.65+0.12,center_z-bay_depth*0.18),Vector3(3.5,0.12,1.2),"#a9c1bc",Vector3(-atan2(rise,bay_depth/2),0,0))
     # Corrugation and a structural rhythm; warm office masonry is distinct.
-    if not office:
+    if not office and b.style != "masonry":
         for x in range(int(w/0.8)):
             for side in [-1.0,1.0]:
                 box(p+Vector3(-w/2+x*0.8, h/2+0.3,side*(d/2+0.04)),Vector3(0.045,h-0.7,0.07),"#879b9b" if b.style != "warehouse" else "#bb694c")
     for side in [-1.0,1.0]:
         box(p+Vector3(0,h-0.15,side*(d/2+0.25)),Vector3(w+0.6,0.17,0.22),"#d0d5c9")
-        for x in range(int(w/8)):
+        for x in range(int(w/8) if b.get("windows",true) else 0):
             var xx: float = -w/2+4+x*8
             box(p+Vector3(xx,h*0.64,side*(d/2+0.12)),Vector3(2.9,1.15,0.12),"#e0e6d4")
             box(p+Vector3(xx,h*0.64,side*(d/2+0.2)),Vector3(2.6,0.88,0.08),"#496f79")
             box(p+Vector3(xx,h*0.64,side*(d/2+0.27)),Vector3(0.08,0.9,0.08),"#b2c8c6")
         # gutters / downpipes
         box(p+Vector3(w/2-0.4,h/2,side*(d/2+0.35)),Vector3(0.15,h,0.15),"#697e7d")
+    if b.style == "masonry" or office:
+        for y in range(1,int(h*2)):
+            for side in [-1,1]: box(p+Vector3(0,y*0.5,side*(d/2+0.035)),Vector3(w,0.025,0.045),"#9c9c8b")
+    elif b.style != "awning":
+        for z in range(int(d/0.7)):
+            var zz: float = -d/2+z*0.7
+            for side in [-1,1]:
+                box(p+Vector3(side*(w/2+0.05),h/2,zz),Vector3(0.06,h-0.2,0.035),"#91a4a4" if b.style not in ["warehouse","third"] else "#ab7056")
     # Doors face the site roads. Loading portals occupy end wall.
-    var doors: int = 3 if b.style == "garage" else 1
+    var doors: int = 4 if b.style == "black" else (3 if b.style == "garage" else 1)
+    var portal_h: float = 5.0 if b.style == "construction" else 4.0
+    var portal_w: float = 5.2 if b.style == "construction" else (2.0 if b.style == "garage" else 3.8)
     for i in doors:
-        var zz: float = (i-(doors-1)*0.5)*2.5
-        box(p+Vector3(w/2+0.08,2.0,zz),Vector3(0.16,4.1,4.2 if doors==1 else 2.25),"#d4d5be")
-        box(p+Vector3(w/2+0.18,1.95,zz),Vector3(0.12,3.8,3.8 if doors==1 else 2.0),"#172b32" if b.style == "construction" else "#354d55")
+        var zz: float = (i-(doors-1)*0.5)*(d/4 if b.style == "black" else 2.5)
+        box(p+Vector3(w/2+0.08,portal_h/2,zz),Vector3(0.16,portal_h+0.3,portal_w+0.4),"#b4c0b8")
+        box(p+Vector3(w/2+0.18,portal_h/2,zz),Vector3(0.12,portal_h,portal_w),"#172b32" if b.style == "construction" else "#354d55")
         for y in range(0 if b.style == "construction" else 7):
-            box(p+Vector3(w/2+0.26,0.4+y*0.5,zz),Vector3(0.06,0.05,3.8 if doors==1 else 2.0),"#657b7b")
+            box(p+Vector3(w/2+0.26,0.4+y*0.5,zz),Vector3(0.06,0.05,portal_w),"#657b7b")
         box(p+Vector3(w/2+3,0.07,zz),Vector3(5.8,0.13,6),"#b7b9a6")
-        for sign in [-1,1]: box(p+Vector3(w/2+1.0,0.7,zz+sign*2.5),Vector3(0.2,1.4,0.2),"#e2b74f")
+        for sign in [-1,1]: box(p+Vector3(w/2+1.0,0.7,zz+sign*(portal_w/2+0.7)),Vector3(0.2,1.4,0.2),"#d0ad57")
     box(p+Vector3(-w*0.25,1.15,d/2+0.12),Vector3(1,2.3,0.18),"#455e62")
     box(p+Vector3(-w*0.25,2.5,d/2+0.6),Vector3(1.7,0.13,1.3),"#798e88")
     if b.style == "construction":
         # Photo: clad gable, still unfinished around the perimeter.
+        for side in [-1,1]:
+            for x in [w/2+0.6,w/2+2.4]:
+                for z in [side*3.4,side*5.4]:box(p+Vector3(x,2.1,z),Vector3(0.1,4.2,0.1),"#a78e60")
+                for y in [1.3,3.6]:box(p+Vector3(x,y,side*4.4),Vector3(0.1,0.1,2.0),"#b89f70")
+            box(p+Vector3(w/2+1.5,3.6,side*4.4),Vector3(2.1,0.12,2.2),"#ae9870")
+        cylinder(p+Vector3(w/2+1.4,0.45,portal_w/2+0.9),0.3,0.9,"#9e4935")
         for i in range(5):
             box(p+Vector3(-w/2+3+i*7,1.7,d/2+1.2),Vector3(0.12,3.4,0.12),"#b78c51")
         for y in [0.7,2.8]: box(p+Vector3(0,y,d/2+1.2),Vector3(w,0.12,0.12),"#b78c51")
@@ -152,6 +191,10 @@ func building(b: Dictionary) -> void:
             ranges[key] = [first,batches[key].transforms.size()]
     var nodes: Array[Node3D] = []
     for i in range(child_start,root.get_child_count()): nodes.append(root.get_child(i))
+    var world_transform := Transform3D(Basis(Vector3.UP,deg_to_rad(float(b.get("rotation",0)))),Vector3(b.x,0,b.z))
+    for key in ranges:
+        for i in range(ranges[key][0],ranges[key][1]): batches[key].transforms[i] = world_transform*batches[key].transforms[i]
+    for node in nodes: node.transform = world_transform*node.transform
     building_ranges[b.id] = {"ranges":ranges,"nodes":nodes}
 
 func move_building(id: String, delta: Vector3) -> void:
@@ -234,3 +277,122 @@ func tree(p: Vector3, seed_value: int) -> void:
         batches[key] = {"mesh":mesh,"color":color,"transforms":[]}
     var scale := 1.7+float(seed_value%4)*0.2
     batches[key].transforms.append(Transform3D(Basis.from_euler(Vector3(0,seed_value,0)).scaled(Vector3(scale,scale*1.35,scale)),p+Vector3(0,3.4,0)))
+
+func polygon(points: PackedVector2Array, y: float, color: String) -> void:
+    var triangles := Geometry2D.triangulate_polygon(points)
+    if triangles.is_empty(): return
+    var st := SurfaceTool.new()
+    st.begin(Mesh.PRIMITIVE_TRIANGLES)
+    for index in triangles:
+        var point := points[index]
+        st.set_normal(Vector3.UP)
+        st.set_uv(point*0.25)
+        st.add_vertex(Vector3(point.x,y,point.y))
+    var node := MeshInstance3D.new()
+    node.mesh = st.commit()
+    var mat := material(color).duplicate() as StandardMaterial3D
+    mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+    node.material_override = mat
+    node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    root.add_child(node)
+
+func road(points: PackedVector2Array, width: float) -> void:
+    for outline in Geometry2D.offset_polyline(points,width/2+0.35,Geometry2D.JOIN_ROUND,Geometry2D.END_ROUND):
+        polygon(outline,0.08,"#c8c5b2")
+    for outline in Geometry2D.offset_polyline(points,width/2,Geometry2D.JOIN_ROUND,Geometry2D.END_ROUND):
+        polygon(outline,0.12,"#737f7c")
+
+func beam(a: Vector3, b: Vector3, thickness: float, color: String) -> void:
+    var direction := (b-a).normalized()
+    var up := Vector3.UP if absf(direction.y)<0.95 else Vector3.RIGHT
+    var key := color+"box"
+    if not batches.has(key): batches[key] = {"mesh":BoxMesh.new(),"color":color,"transforms":[]}
+    var basis := Basis.looking_at(direction,up)*Basis.from_scale(Vector3(thickness,thickness,a.distance_to(b)))
+    batches[key].transforms.append(Transform3D(basis,(a+b)/2))
+
+func fence(points: PackedVector2Array, height: float = 2.25) -> void:
+    for i in range(points.size()-1):
+        var a := Vector3(points[i].x,0,points[i].y)
+        var b := Vector3(points[i+1].x,0,points[i+1].y)
+        var count := maxi(1,ceili(a.distance_to(b)/2.8))
+        for j in range(count+1):
+            var p := a.lerp(b,float(j)/count)
+            box(p+Vector3(0,height/2,0),Vector3(0.12,height,0.12),"#536863")
+            if j == count: continue
+            var q := a.lerp(b,float(j+1)/count)
+            for y in [0.35,height*0.55,height-0.15]: beam(p+Vector3(0,y,0),q+Vector3(0,y,0),0.045,"#7b8b7e")
+            for k in range(6):
+                var at := p.lerp(q,(k+0.5)/6.0)
+                box(at+Vector3(0,height/2,0),Vector3(0.025,height-0.3,0.025),"#7b8b7e")
+
+func railway(points: PackedVector2Array, gauge: float = 1.52) -> void:
+    road(points,3.5)
+    for i in range(points.size()-1):
+        var a := Vector3(points[i].x,0,points[i].y)
+        var b := Vector3(points[i+1].x,0,points[i+1].y)
+        var normal := (b-a).normalized().cross(Vector3.UP)
+        for side in [-1,1]: beam(a+normal*gauge/2*side+Vector3(0,0.3,0),b+normal*gauge/2*side+Vector3(0,0.3,0),0.11,"#5a6767")
+        for j in range(int(a.distance_to(b)/1.4)):
+            var p := a.lerp(b,float(j)/maxf(1,int(a.distance_to(b)/1.4)))
+            beam(p-normal*1.3+Vector3(0,0.2,0),p+normal*1.3+Vector3(0,0.2,0),0.17,"#7a7361")
+
+func tower_crane(c: Dictionary) -> void:
+    var p := Vector3(c.center[0],0,c.center[1])
+    var a := Vector3(c.rail_start[0],0.25,c.rail_start[1])
+    var b := Vector3(c.rail_end[0],0.25,c.rail_end[1])
+    for side in [-1,1]: beam(a+Vector3(side*2,0,0),b+Vector3(side*2,0,0),0.14,"#626d6b")
+    for x in [-1.1,1.1]:
+        for z in [-1.1,1.1]: box(p+Vector3(x,c.height/2,z),Vector3(0.18,c.height,0.18),"#b8a05e")
+    for level in range(int(c.height/2.5)):
+        var y: float = level*2.5
+        for side in [-1.1,1.1]:
+            beam(p+Vector3(-1.1,y,side),p+Vector3(1.1,y+2.5,side),0.1,"#c1a76a")
+            beam(p+Vector3(side,y,-1.1),p+Vector3(side,y+2.5,1.1),0.1,"#c1a76a")
+            beam(p+Vector3(-1.1,y,side),p+Vector3(1.1,y,side),0.1,"#8f855c")
+    box(p+Vector3(0,0.6,0),Vector3(5.5,1.0,5.5),"#5a6b69")
+    box(p+Vector3(0,c.height,0),Vector3(3,1.4,3),"#d1b66c")
+    box(p+Vector3(-1.7,c.height-0.8,0),Vector3(1.4,2,1.7),"#53727a")
+    # Lattice jib faces west over the container strip and loading yard.
+    for side in [-0.65,0.65]:
+        beam(p+Vector3(-c.boom,c.height+1.2,side),p+Vector3(10,c.height+1.2,side),0.18,"#b8a05e")
+        beam(p+Vector3(-c.boom,c.height+2.6,0),p+Vector3(10,c.height+2.6,0),0.14,"#cbb172")
+    for x in range(-int(c.boom),10,3):
+        beam(p+Vector3(x,c.height+1.2,-0.65),p+Vector3(x+3,c.height+2.6,0),0.09,"#c1a76a")
+        beam(p+Vector3(x,c.height+1.2,0.65),p+Vector3(x+3,c.height+2.6,0),0.09,"#c1a76a")
+    box(p+Vector3(8,c.height+0.3,0),Vector3(3,2,3),"#7b8375")
+    beam(p+Vector3(-c.boom*0.65,c.height+1,0),p+Vector3(-c.boom*0.65,3,0),0.045,"#354b50")
+    box(p+Vector3(-c.boom*0.65,2.7,0),Vector3(0.4,0.6,0.4),"#b8a05e")
+
+func gantry(c: Dictionary) -> void:
+    var p := Vector3(c.center[0],0,c.center[1])
+    for z in [-c.span/2,c.span/2]:
+        beam(p+Vector3(-c.travel/2,0.22,z),p+Vector3(c.travel/2,0.22,z),0.13,"#687b76")
+        for x in [-2,2]:
+            box(p+Vector3(x,c.height/2,z),Vector3(0.35,c.height,0.45),"#ad8d50")
+            box(p+Vector3(x,0.5,z),Vector3(1.8,0.5,0.8),"#526b68")
+    for x in [-2,2]:
+        box(p+Vector3(x,c.height,0),Vector3(0.45,0.7,c.span+1),"#c8aa5e")
+    for z in range(-int(c.span/2),int(c.span/2)+1,3): box(p+Vector3(0,c.height,z),Vector3(4,0.18,0.16),"#bba15b")
+    box(p+Vector3(0,c.height-0.5,0),Vector3(4,0.6,1.6),"#5d7474")
+    beam(p+Vector3(0,c.height,0),p+Vector3(0,2,0),0.045,"#354b50")
+
+func board(points: PackedVector2Array, depth: float, top_color: String, edge_color: String) -> void:
+    polygon(points,0,top_color)
+    var st := SurfaceTool.new()
+    st.begin(Mesh.PRIMITIVE_TRIANGLES)
+    st.set_smooth_group(-1)
+    for i in points.size():
+        var p := points[i]
+        var q := points[(i+1)%points.size()]
+        var a := Vector3(p.x,0,p.y)
+        var b := Vector3(q.x,0,q.y)
+        var c := b-Vector3(0,depth,0)
+        var d := a-Vector3(0,depth,0)
+        for vertex in [a,b,c,a,c,d]:st.add_vertex(vertex)
+    st.generate_normals()
+    var node := MeshInstance3D.new()
+    node.mesh = st.commit()
+    var mat := material(edge_color).duplicate() as StandardMaterial3D
+    mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+    node.material_override = mat
+    root.add_child(node)

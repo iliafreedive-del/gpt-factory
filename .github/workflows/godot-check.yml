@@ -22,3 +22,10 @@ jobs:
           godot --headless --path . --quit-after 30 > /tmp/godot-runtime.log 2>&1 || { cat /tmp/godot-runtime.log; exit 1; }
           cat /tmp/godot-runtime.log
           if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-runtime.log; then exit 1; fi
+
+  geometry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate annotated site geometry
+        run: python3 tools/check_site.py

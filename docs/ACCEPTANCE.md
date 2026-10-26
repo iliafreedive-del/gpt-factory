@@ -1,25 +1,40 @@
-# Exterior release 1.0.0 — acceptance record
+# BUILD / MAP 1.1.0 — проверка исправленной планировки
 
-**CHECKED:** Godot 4.4.1 import and 30-frame scene startup; strict stdout/stderr error scanning; Web release export; actual Chromium WebGL 2 rendering; four camera presets; geometry/scale consistency checks. **UNSURVEYED:** placement, heights, property outline and clearances beyond the two interpreted map anchors. **PUBLICATION:** independent of local validation; public Pages/API access was blocked by the cloud proxy (HTTP 403). No deployed-version verification is claimed.
+## Что исправлено относительно 1.0.0
 
-## Visual evidence and comparison
+- Обработан смысл последней разметки владельца: красные линии — заборы; зелёные — проезды; стрелки не являются объектами сцены.
+- Удалена придуманная прямоугольная сетка дорог и неверный общий периметр. Теперь это оцифрованные полилинии с поворотами и раздельными границами участков.
+- Цех 1 ориентирован с севера на юг, а не вдоль цеха 2. Цех 2, малярка и офис 2 собраны в вытянутый составной объём с плоскими кровлями.
+- Восточный чёрный цех восстановлен в масштабе большого контура на карте (108×94 m, оценка), а не оставлен маленьким 29×44 m сараем. Добавлены корпуса, видимые к югу/востоку от него, без выдуманного назначения.
+- ЛГЦ / стройка / красное стороннее здание сближены по карте. У нового цеха обшитый фронтон, открытый проём, леса, склад панелей и бочка по фото.
+- У контейнерной площадки появился отдельный башенный кран на рельсовом ходу; козловой кран погрузки на цинк не выдаётся за него.
+- Перечёркнутый южный чужой квартал исключён из моделирования. На нём нет заводских объектов; презентационная подложка вырезана вместо большого пустого прямоугольника.
+- Исправлен порядок масштабирования/поворота деталей кровли, убраны нестабильные микротени швов и включено MSAA 2×.
 
-| Scope | Actual game screenshot | Comparison against supplied sources |
-|---|---|---|
-| Entire grounds | [Full site](evidence/full-site.png) | Whole map fits; coherent road surfaces, perimeter openings, railway, tree buffer and east black shop replace the old six-box layout. Source plan is preliminary, not a surveyed twin. |
-| LGC / new workshop | [Oblique close-up](evidence/lgc-construction.png) | Two metal-clad gables and red third-party neighbor follow photograph adjacency. The new shop has an open dark portal, scaffold and stored panels. No interior is modelled. |
-| Logistics yard | [Zinc / loading yard](evidence/loading-yard.png) | Separate welded-frame rows, trailer groups, gantry rails, open twin-girder crane, container corridor and pallets. Counts are illustrative, not inventory/capacity assertions. |
-| Other workshops | [Workshop side](evidence/workshops.png) | Distinct warm offices, annexes, awning, sandblast/paint and assembly footprints, corrugation, roof seams/skylights, personnel/loading doors, gutters and aprons. |
-| Names / UI | [Labels](evidence/labels.png), [800×600](evidence/compact.png) | Anchored BUILD/MAP, estimated-plan warning, selection data, scale bar, orbit/pan/zoom and camera presets. Main names only at full-site zoom; smaller labels require closer view. |
+## Фактические изображения WebGL
 
-The two [art targets](../handoff/source/03_REFERENCES/image(9).png) show compact, densely dressed, partly open industrial dioramas. This exterior adopts a restrained blue/steel/ochre palette, visible roof structure, detailed representative trailers, concrete/asphalt separation and purposeful storage arrangements. Its geographically larger open yards are deliberately less dense. It does **not** reproduce the targets' indoor machinery, cutaway walls, bespoke hand-painted assets or baked ambient occlusion, and exact artistic parity is not asserted. Roof seam shadow aliasing remains visible on the software renderer at some distances. This is a substantial coherent exterior release, not owner sign-off on final visual or surveying accuracy.
+| Ракурс | Скриншот |
+|---|---|
+| План сверху, контуры ограждений красные, оси проездов зелёные | [site-plan](evidence/site-plan.png) |
+| Вся территория | [full-site](evidence/full-site.png) |
+| ЛГЦ, новый цех и стороннее здание | [lgc-construction](evidence/lgc-construction.png) |
+| Контейнерный коридор и кран | [loading-yard](evidence/loading-yard.png) |
+| Цех 1 / цех 2 | [workshops](evidence/workshops.png) |
+| Большой восточный корпус | [eastern-workshop](evidence/eastern-workshop.png) |
+| Подписи и компактный экран | [labels](evidence/labels.png), [compact](evidence/compact.png) |
 
-## Repeatable verification
+Режим «План [5]» специально показывает семантическую разметку для сопоставления с картой. В обычной игре заборы металлические, дороги асфальтовые. BUILD/MAP закреплены в правом верхнем углу. Статус версии проверяется из работающей игры, а перед захватом скриншотов ожидаются дополнительные реальные кадры Godot, а не только кадры браузера.
 
-`GODOT_BIN=/workspace/.godot-setup/bin/godot tools/validate.sh` runs the actual engine and independent data checks: 18 unique positive building footprints, no overlapping building envelopes, two perpendicular warehouse scales within 3%. It does not count a zero-test run as a test suite. There is no supplied unit-test suite.
+## Проверки
 
-`node tools/capture.cjs` opens the exported game, waits for its runtime BUILD/MAP identity, switches camera views and captures actual pixels. It also exercises actual ray picking and a reversible one-metre edit. Chromium uses software WebGL in this cloud environment; no hardware performance guarantee is implied. `evidence/web-artifacts.json` records the exact exported artifact hashes.
+`tools/validate.sh`: Godot 4.4.1 import + запуск сцены на 30 кадров; проверка stdout/stderr даже при нулевом коде выхода. `tools/check_site.py`: 16 повёрнутых контуров, отсутствие пересечений зданий/дорог и перекрытия проездов заборами, отсутствие объектов и дорог на исключённом участке, согласование двух метрических опор и контроль ориентации цеха 1 / размера восточного корпуса. Проверки не отключались ради прохождения.
 
-CI scans import/runtime/export logs for `SCRIPT ERROR`, `Parse Error`, `Failed to load script` and `ERROR:` even on exit zero. GitHub green status is not used as artistic acceptance.
+`tools/capture.cjs`: Chromium/WebGL 2; проверка BUILD/MAP, настоящий выбор ЛГЦ лучом мыши, обратимый сдвиг на метр, шесть ракурсов и два состояния интерфейса. Журналы и SHA-256 экспортированных артефактов лежат рядом со скриншотами.
 
-See [MEASUREMENTS.md](MEASUREMENTS.md) for assumptions and field questions, and [SOURCE_REVIEW.md](SOURCE_REVIEW.md) for all supplied materials. Interiors are deferred. Local E/arrow sketch changes reset on reload; permanent map corrections belong in `data/site.json`.
+GitHub Pages теперь тоже выполняет геометрические проверки и запускает сцену перед экспортом. Зелёный CI не заменяет визуальный просмотр. Проверка локальной Web-сборки и проверка опубликованной страницы — разные результаты; опубликованная версия не объявляется проверенной без доступа к ней.
+
+## Достоверность и сравнение с эталонами
+
+Сравнение с 2ГИС относится к контурам, ориентации и дорожной топологии. Игровые референсы относятся к стилизации, детализации и читаемости; их внутренние станки/разрезанные стены не переносятся в этот этап экстерьера. Подробные фасады зданий, которых нет на единственной реальной фотографии из архива, не объявляются достоверной реконструкцией. Уточнения размеров и архитектурные предположения перечислены в [MEASUREMENTS.md](MEASUREMENTS.md).
+
+Предыдущие изображения 1.0.0 сохранены отдельно в `evidence/1.0.0/` для проверки изменений. Это не скриншоты текущей версии.

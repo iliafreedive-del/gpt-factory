@@ -20,7 +20,7 @@ jobs:
       - name: Install Godot 4.4.1 Web export templates
         run: |
           set -eu
-          apt-get update -qq && apt-get install -y -qq curl unzip ca-certificates
+          apt-get update -qq && apt-get install -y -qq curl unzip ca-certificates python3
           TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/4.4.1.stable"
           mkdir -p "$TEMPLATE_DIR"
           if [ ! -f "$TEMPLATE_DIR/web_nothreads_release.zip" ]; then
@@ -35,6 +35,12 @@ jobs:
           godot --headless --path . --editor --import --quit > /tmp/godot-import.log 2>&1 || { cat /tmp/godot-import.log; exit 1; }
           cat /tmp/godot-import.log
           if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-import.log; then exit 1; fi
+      - name: Validate geometry and run scene
+        run: |
+          python3 tools/check_site.py
+          godot --headless --path . --quit-after 30 > /tmp/godot-runtime.log 2>&1 || { cat /tmp/godot-runtime.log; exit 1; }
+          cat /tmp/godot-runtime.log
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-runtime.log; then exit 1; fi
       - name: Export Web
         run: |
           mkdir -p build
