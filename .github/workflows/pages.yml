@@ -31,7 +31,10 @@ jobs:
           fi
           test -f "$TEMPLATE_DIR/web_nothreads_release.zip"
       - name: Import assets
-        run: godot --headless --path . --editor --import --quit
+        run: |
+          godot --headless --path . --editor --import --quit > /tmp/godot-import.log 2>&1 || { cat /tmp/godot-import.log; exit 1; }
+          cat /tmp/godot-import.log
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/godot-import.log; then exit 1; fi
       - name: Export Web
         run: |
           mkdir -p build
