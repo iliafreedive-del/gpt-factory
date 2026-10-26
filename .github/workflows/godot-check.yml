@@ -13,6 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Import project
-        run: godot --headless --path . --editor --import --quit
+        run: |
+          godot --headless --path . --editor --import --quit > /tmp/godot-import.log 2>&1 || { cat /tmp/godot-import.log; exit 1; }
+          cat /tmp/godot-import.log
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/godot-import.log; then exit 1; fi
       - name: Parse and launch scene
-        run: godot --headless --path . --quit-after 5
+        run: |
+          godot --headless --path . --quit-after 5 > /tmp/godot-runtime.log 2>&1 || { cat /tmp/godot-runtime.log; exit 1; }
+          cat /tmp/godot-runtime.log
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/godot-runtime.log; then exit 1; fi
