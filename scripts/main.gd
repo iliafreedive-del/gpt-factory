@@ -88,8 +88,8 @@ func _building(title: String, at: Vector3, size: Vector3, tint: Color, roof: boo
     if roof:
         # Two inclined planes form the pitched sheet-metal roof.
         var half := size.z * 0.5
-        var rise := min(3.2, half * 0.3)
-        var slope_length := sqrt(half * half + rise * rise)
+        var rise: float = minf(3.2, half * 0.3)
+        var slope_length: float = sqrt(half * half + rise * rise)
         for direction in [-1, 1]:
             var incline := MeshInstance3D.new()
             var roof_mesh := BoxMesh.new()
