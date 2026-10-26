@@ -185,7 +185,7 @@ func _unhandled_input(event: InputEvent) -> void:
             var origin := cam.project_ray_origin(event.position)
             var destination := origin + cam.project_ray_normal(event.position) * 1000.0
             var query := PhysicsRayQueryParameters3D.create(origin, destination)
-            var hit := get_world_3d().direct_space_state.intersect_ray(query)
+            var hit: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
             if not hit.is_empty() and hit["collider"] is StaticBody3D:
                 selected = hit["collider"]
                 _status()
