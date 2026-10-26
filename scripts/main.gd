@@ -3,7 +3,7 @@ extends Node3D
 # 1 Godot world unit is 1 real metre. Initial dimensions/positions are estimates.
 var cam: Camera3D
 var target := Vector3(0, 0, 0)
-var distance := 165.0
+var distance := 305.0
 var azimuth := 0.75
 var elevation := 0.75
 var rotating := false
@@ -148,7 +148,7 @@ func _ui() -> void:
     var column := VBoxContainer.new()
     panel.add_child(column)
     var title := Label.new()
-    title.text = "АЛЯСКА  •  ЦИФРОВОЙ ЗАВОД"
+    title.text = "АЛЯСКА  •  ЦИФРОВОЙ ЗАВОД  •  КАРТА v0.2"
     column.add_child(title)
     info = Label.new()
     info.text = "1 единица = 1 метр | ПЛАНИРОВКА ПРЕДВАРИТЕЛЬНАЯ"
@@ -171,7 +171,7 @@ func _status() -> void:
         caption += " | " + selected.name + " | габариты: " + str(dims) + " м"
     else:
         caption += " | выбери объект"
-    info.text = caption
+    info.text = caption + " | ТЕРРИТОРИЯ v0.2"
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseButton:
