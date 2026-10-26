@@ -26,6 +26,7 @@ func _ready() -> void:
     _building("Цех 2 • малярка / сборка", Vector3(-57, 0, 8), Vector3(81, 8, 24), Color("#a7afb0"), true)
     _building("Цех 1 • сварка / сборка", Vector3(-140, 0, 5), Vector3(60, 8, 24), Color("#96aaa9"), true)
     _site_details()
+    _visual_details()
     for i in range(12):
         _crate(Vector3(-40 + (i % 6) * 5, 0, -78 + int(i / 6) * 5))
     _camera()
@@ -99,6 +100,7 @@ func _building(title: String, at: Vector3, size: Vector3, tint: Color, roof: boo
             incline.position = Vector3(0, size.y + rise * 0.5, direction * half * 0.5)
             incline.material_override = _material(tint.lightened(0.18))
             building.add_child(incline)
+    _factory_facade(building, size, tint)
     # Approximate a wide, dark industrial door at the visible gable end.
     _part(building, Vector3(0.18, size.y * 0.63, min(7.0, size.z * 0.45)), Vector3(size.x * 0.5 + 0.13, size.y * 0.32, 0), Color("#243139"))
     var text := Label3D.new()
@@ -148,7 +150,7 @@ func _ui() -> void:
     var column := VBoxContainer.new()
     panel.add_child(column)
     var title := Label.new()
-    title.text = "АЛЯСКА  •  ЦИФРОВОЙ ЗАВОД  •  КАРТА v0.2"
+    title.text = "АЛЯСКА  •  ЦИФРОВОЙ ЗАВОД  •  КАРТА v0.4 • BUILD 004"
     column.add_child(title)
     info = Label.new()
     info.text = "1 единица = 1 метр | ПЛАНИРОВКА ПРЕДВАРИТЕЛЬНАЯ"
@@ -303,3 +305,89 @@ func _tree(pos: Vector3) -> void:
     crown.position = pos+Vector3(0,4.3,0)
     crown.material_override = _material(Color("#7e9b65"))
     add_child(crown)
+
+# BUILD 004 — visible exterior details, not a surveyed reconstruction.
+func _factory_facade(body: Node3D, size: Vector3, tint: Color) -> void:
+    # Repeating window bays and corrugation ribs along industrial facades.
+    var bays: int = maxi(3, int(size.x / 8.0))
+    for i in range(bays):
+        var x: float = -size.x * 0.5 + (float(i) + 0.5) * size.x / float(bays)
+        for side in [-1.0, 1.0]:
+            _part(body, Vector3(size.x / float(bays) * 0.44, 1.45, 0.10), Vector3(x, size.y * 0.62, side * (size.z * 0.5 + 0.08)), Color("#6b929e"))
+            _part(body, Vector3(0.12, 1.85, 0.15), Vector3(x, size.y * 0.62, side * (size.z * 0.5 + 0.18)), Color("#d9e1e3"))
+    for r in range(maxi(2, int(size.x / 3.0))):
+        var rib_x: float = -size.x * 0.5 + float(r) * 3.0
+        for side in [-1.0, 1.0]:
+            _part(body, Vector3(0.085, size.y * 0.95, 0.085), Vector3(rib_x, size.y * 0.50, side * (size.z * 0.5 + 0.065)), tint.lightened(0.22))
+    # Entrance apron and overhead loading lintel.
+    _part(body, Vector3(6.5, 0.08, 9.0), Vector3(size.x * 0.5 + 3.5, 0.03, 0.0), Color("#aaa8a2"))
+    _part(body, Vector3(0.3, 0.42, 8.1), Vector3(size.x * 0.5 + 0.26, size.y * 0.67, 0.0), Color("#e7e7de"))
+    # Roof skylight strips.
+    for q in range(maxi(1, int(size.x / 22.0))):
+        var rx: float = -size.x * 0.5 + (float(q) + 0.5) * size.x / float(maxi(1, int(size.x / 22.0)))
+        _part(body, Vector3(5.0, 0.12, 1.5), Vector3(rx, size.y + 1.8, -size.z * 0.23), Color("#82979d"))
+
+func _visual_details() -> void:
+    # Exterior staging, perimeter lane markings, trailers, forklift silhouettes.
+    for i in range(14):
+        var px: float = -182.0 + float(i % 7) * 7.5
+        var pz: float = 72.0 + float(i / 7) * 11.0
+        _trailer_visual(Vector3(px, 0.0, pz))
+    for j in range(8):
+        _frame_visual(Vector3(-69.0 + float(j % 4) * 10.0, 0.0, -101.0 + float(j / 4) * 5.0))
+    for k in range(6):
+        _pallet_visual(Vector3(26.0 + float(k % 3) * 5.5, 0.0, -10.0 + float(k / 3) * 4.0))
+    _forklift_visual(Vector3(17.0, 0.0, 43.0))
+    _forklift_visual(Vector3(-98.0, 0.0, 40.0))
+    for s in range(20):
+        _part(self, Vector3(0.22, 0.04, 1.8), Vector3(-175.0 + float(s) * 11.0, 0.12, 32.5), Color("#ebe6c3"))
+
+func _trailer_visual(p: Vector3) -> void:
+    var rig := Node3D.new()
+    rig.position = p
+    add_child(rig)
+    _part(rig, Vector3(4.8, 0.23, 2.0), Vector3(0.0, 0.65, 0.0), Color("#b6c8ca"))
+    for zz in [-0.75, 0.75]:
+        _part(rig, Vector3(3.9, 0.65, 0.10), Vector3(0.0, 0.98, zz), Color("#b0bdbe"))
+    for xx in [-1.2, 1.2]:
+        for zz in [-0.92, 0.92]:
+            var wheel := CylinderMesh.new()
+            wheel.top_radius = 0.36
+            wheel.bottom_radius = 0.36
+            wheel.height = 0.20
+            var mi := MeshInstance3D.new()
+            mi.mesh = wheel
+            mi.rotation_degrees.z = 90.0
+            mi.position = Vector3(xx, 0.38, zz)
+            mi.material_override = _material(Color("#333a3c"))
+            rig.add_child(mi)
+    _part(rig, Vector3(1.7, 0.12, 0.12), Vector3(3.16, 0.62, 0.0), Color("#596368"))
+
+func _frame_visual(p: Vector3) -> void:
+    var frame := Node3D.new()
+    frame.position = p
+    add_child(frame)
+    for z in [-0.9, 0.9]:
+        _part(frame, Vector3(5.2, 0.16, 0.17), Vector3(0.0, 0.45, z), Color("#454f55"))
+    for x in [-2.1, 0.0, 2.1]:
+        _part(frame, Vector3(0.17, 0.16, 1.9), Vector3(x, 0.45, 0.0), Color("#454f55"))
+
+func _pallet_visual(p: Vector3) -> void:
+    var stack := Node3D.new()
+    stack.position = p
+    add_child(stack)
+    _part(stack, Vector3(2.4, 0.16, 1.2), Vector3(0.0, 0.10, 0.0), Color("#9e8055"))
+    for n in range(4):
+        _part(stack, Vector3(0.9, 0.64, 0.52), Vector3(-0.55 + float(n % 2) * 1.1, 0.50, -0.30 + float(n / 2) * 0.60), Color("#bf9b6e"))
+
+func _forklift_visual(p: Vector3) -> void:
+    var v := Node3D.new()
+    v.position = p
+    add_child(v)
+    _part(v, Vector3(2.1, 0.9, 1.25), Vector3(0.0, 0.7, 0.0), Color("#e3ae3f"))
+    for z in [-0.55, 0.55]:
+        _part(v, Vector3(0.75, 0.8, 0.23), Vector3(-0.65, 1.55, z), Color("#424c52"))
+    _part(v, Vector3(1.3, 0.16, 1.25), Vector3(-0.65, 2.0, 0.0), Color("#424c52"))
+    _part(v, Vector3(0.18, 2.3, 1.2), Vector3(1.1, 1.18, 0.0), Color("#48545a"))
+    for z in [-0.45, 0.45]:
+        _part(v, Vector3(2.1, 0.12, 0.10), Vector3(2.0, 0.20, z), Color("#586065"))
