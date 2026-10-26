@@ -1,0 +1,18 @@
+name: Godot headless validation
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.4.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import project
+        run: godot --headless --path . --editor --import --quit
+      - name: Parse and launch scene
+        run: godot --headless --path . --quit-after 5
