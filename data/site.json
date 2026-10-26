@@ -1,6 +1,6 @@
 {
-  "build": "1.1.1",
-  "map_version": "1.1.0",
+  "build": "1.1.2",
+  "map_version": "1.1.1",
   "units": "metres",
   "orientation": "Screen-up follows supplied 2GIS / Excel; true north unverified",
   "trace": {
@@ -269,11 +269,13 @@
   "zones": [
     {
       "name": "Рамы → цинк",
-      "x": -57.143,
+      "x": -51.02,
       "z": -68.163,
-      "w": 24,
+      "w": 21,
       "d": 21,
-      "kind": "frames"
+      "kind": "frames",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Айвазовского · розница",
@@ -281,7 +283,9 @@
       "z": -64.898,
       "w": 38,
       "d": 14,
-      "kind": "trailers"
+      "kind": "trailers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Молокова · готовые",
@@ -289,7 +293,9 @@
       "z": -59.184,
       "w": 33,
       "d": 11,
-      "kind": "trailers"
+      "kind": "trailers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Погрузка на цинк",
@@ -297,31 +303,39 @@
       "z": -67.347,
       "w": 28,
       "d": 23,
-      "kind": "crane"
+      "kind": "crane",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Контейнерщики",
-      "x": 100.816,
+      "x": 97.959,
       "z": -25.714,
-      "w": 17,
+      "w": 14.5,
       "d": 65,
-      "kind": "containers"
+      "kind": "containers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Ожидание пескоструя",
-      "x": -62.857,
+      "x": -61.633,
       "z": -40.408,
       "w": 8,
       "d": 15,
-      "kind": "frames"
+      "kind": "frames",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Клиенты · с колёс",
-      "x": -28.98,
+      "x": -25.714,
       "z": -26.939,
-      "w": 36,
+      "w": 32,
       "d": 5,
-      "kind": "trailers"
+      "kind": "trailers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Клиенты · выдача",
@@ -329,7 +343,9 @@
       "z": -14.694,
       "w": 28,
       "d": 5,
-      "kind": "trailers"
+      "kind": "trailers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Окрашенные → сборка",
@@ -337,7 +353,9 @@
       "z": 7.755,
       "w": 30,
       "d": 5,
-      "kind": "frames"
+      "kind": "frames",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Отправка дилерам",
@@ -345,7 +363,9 @@
       "z": 28.571,
       "w": 28,
       "d": 9,
-      "kind": "trailers"
+      "kind": "trailers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Ремонт / брак",
@@ -353,7 +373,9 @@
       "z": -45.306,
       "w": 19,
       "d": 13,
-      "kind": "scrap"
+      "kind": "scrap",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     },
     {
       "name": "Номенклатура не уточнена · Excel A4/C4",
@@ -361,7 +383,9 @@
       "z": -71.429,
       "w": 21,
       "d": 20,
-      "kind": "trailers"
+      "kind": "trailers",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
     }
   ],
   "roads": [
@@ -953,7 +977,8 @@
       5.714
     ],
     "height": 23,
-    "boom": 35
+    "boom": 35,
+    "clearance_width": 6
   },
   "checkpoint": {
     "point": [

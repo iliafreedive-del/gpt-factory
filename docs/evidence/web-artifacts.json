@@ -1,7 +1,7 @@
 {
   "index.html": {
     "bytes": 5417,
-    "sha256": "f9a4769004ea8d19c795587c29138bd510b10c40f2ffeb0af057faddd6758e8a"
+    "sha256": "978c615dda4c55b0616d8b0db8905a54034ac83ae82b36988800c2c124acbacf"
   },
   "index.js": {
     "bytes": 317142,
@@ -12,7 +12,7 @@
     "sha256": "e4a43dbae28662b2a68f6136857a94db6695430901515800b9883f6327cb7116"
   },
   "index.pck": {
-    "bytes": 65456,
-    "sha256": "be740404ca1ba86a06697182af37f6a6ca87215f49dba3efdcf4996dfd2c9ce2"
+    "bytes": 68080,
+    "sha256": "b94cb148c0b6d89b452852fea7c54d4d94fd3109935539436670b4e9bb9c905e"
   }
 }

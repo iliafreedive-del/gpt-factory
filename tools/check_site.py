@@ -51,6 +51,16 @@ assert not road_conflicts,('paved roads intersect buildings',road_conflicts)
 for road in site['roads']:
     for excluded in site['excluded_areas']:
         assert not any(inside(point,excluded['points']) for point in road['points']),(road['id'],'road enters excluded parcel')
+for zone in site['zones']:
+    poly=footprint(zone)
+    for road in site['roads']:
+        for a,b in zip(road['points'],road['points'][1:]):
+            distance=min(segment_distance(a,b,u,v) for u,v in edges(poly))
+            assert not inside(a,poly) and not inside(b,poly) and distance>=road['width']/2-0.1,('storage yard covers road',zone['name'],road['id'])
+    for b,pb in bodies:assert not overlap(poly,pb),('storage yard inside building',zone['name'],b['id'])
+    tower=site['tower_crane']
+    distance=min(segment_distance(tower['rail_start'],tower['rail_end'],a,b) for a,b in edges(poly))
+    assert distance>=tower['clearance_width']/2-0.1,('stock blocks tower crane travel',zone['name'])
 fence_conflicts=[]
 for index,fence in enumerate(site['fences']+site.get('open_gate_leaves',[])):
     for a,b in zip(fence,fence[1:]):
@@ -66,4 +76,4 @@ by_id={b['id']:b for b in site['buildings']}
 assert abs(by_id['shop1']['rotation'])==90,'Shop 1 must follow the north/south building axis'
 assert by_id['black']['w']>2*by_id['lgc']['w'],'Black workshop scale must match the large eastern map footprint'
 assert not ids.intersection(['garage1','garage2','mini','parts','axes']),'Unsupported southern standalone buildings must not return'
-print(f"PASS {len(ids)} rotated footprints; no building/road/fence collisions; exclusion clear; two-source calibration; shop-1 orientation and eastern footprint scale.")
+print(f"PASS {len(ids)} rotated footprints; no building/road/fence/stock collisions; crane travel clear; exclusion clear; two-source calibration; shop-1 orientation and eastern footprint scale.")
