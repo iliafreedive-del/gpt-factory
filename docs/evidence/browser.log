@@ -1,0 +1,7 @@
+log Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+log OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL
+PASS browser picking and reversible one-metre building edit
+CAPTURE full-site {"build":"1.0.0","map":"1.0.0","view":1}
+CAPTURE lgc-construction {"build":"1.0.0","map":"1.0.0","view":2}
+CAPTURE loading-yard {"build":"1.0.0","map":"1.0.0","view":3}
+CAPTURE workshops {"build":"1.0.0","map":"1.0.0","view":4}

@@ -1,0 +1,4 @@
+.godot/
+*.gd.uid
+build/
+node_modules/

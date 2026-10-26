@@ -34,11 +34,14 @@ jobs:
         run: |
           godot --headless --path . --editor --import --quit > /tmp/godot-import.log 2>&1 || { cat /tmp/godot-import.log; exit 1; }
           cat /tmp/godot-import.log
-          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script' /tmp/godot-import.log; then exit 1; fi
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-import.log; then exit 1; fi
       - name: Export Web
         run: |
           mkdir -p build
-          godot --headless --path . --export-release Web build/index.html
+          godot --headless --path . --export-release Web build/index.html > /tmp/godot-export.log 2>&1 || { cat /tmp/godot-export.log; exit 1; }
+          cat /tmp/godot-export.log
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-export.log; then exit 1; fi
+          for artifact in index.html index.js index.wasm index.pck; do test -s "build/$artifact"; done
       - uses: actions/upload-artifact@v4
         with:
           name: factory-web

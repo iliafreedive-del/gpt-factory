@@ -1,0 +1,25 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+first_scan_filesystem: begin: Project initialization steps: 5
+	first_scan_filesystem: step 0: Scanning file structure...
+	first_scan_filesystem: step 1: Loading global class names...
+	first_scan_filesystem: step 2: Verifying GDExtensions...
+	first_scan_filesystem: step 3: Creating autoload scripts...
+	first_scan_filesystem: step 4: Initializing plugins...
+	first_scan_filesystem: step 5: Starting file scan...
+first_scan_filesystem: end
+savepack: begin: Packing steps: 102
+	savepack: step 2: Storing File: res://data/site.json
+	savepack: step 27: Storing File: res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+	savepack: step 52: Storing File: res://scripts/world/industrial_kit.gdc
+	savepack: step 77: Storing File: res://scripts/main.gdc
+	savepack: step 77: Storing File: res://scenes/main.tscn.remap
+	savepack: step 77: Storing File: res://scripts/world/industrial_kit.gd.remap
+	savepack: step 77: Storing File: res://scripts/main.gd.remap
+	savepack: step 77: Storing File: res://.godot/global_script_class_cache.cfg
+	savepack: step 77: Storing File: res://.godot/uid_cache.bin
+	savepack: step 77: Storing File: res://project.binary
+savepack: end
+loading_editor_layout: begin: Loading editor steps: 5
+	loading_editor_layout: step 0: Loading editor layout...
+loading_editor_layout: end

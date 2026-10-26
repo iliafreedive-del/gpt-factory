@@ -1,0 +1,469 @@
+{
+  "build": "1.0.0",
+  "map_version": "1.0.0",
+  "units": "metres",
+  "orientation": "Screen-up follows supplied 2GIS / Excel; true north unverified",
+  "buildings": [
+    {
+      "id": "red",
+      "name": "Склад комплектующих",
+      "x": -43,
+      "z": -32,
+      "w": 49,
+      "d": 14,
+      "h": 6.5,
+      "style": "warehouse",
+      "color": "#a34e38",
+      "source": "2GIS image(6): cumulative 129→143→192 m; 307px/49m and 87px/14m",
+      "confidence": "MAP ANCHOR ±2m",
+      "rotation": 0
+    },
+    {
+      "id": "lgc",
+      "name": "ЛГЦ · лазер / гибка",
+      "x": 32,
+      "z": -33,
+      "w": 38,
+      "d": 12,
+      "h": 6.5,
+      "style": "metal",
+      "color": "#abbfc2",
+      "source": "2GIS image(6): cumulative 0→12→50 m; 242px/38m and 73px/12m",
+      "confidence": "MAP ANCHOR ±2m",
+      "rotation": 0
+    },
+    {
+      "id": "new",
+      "name": "Новый цех · строительство",
+      "x": 32,
+      "z": -13,
+      "w": 38,
+      "d": 13,
+      "h": 7.5,
+      "style": "construction",
+      "color": "#b5c7cb",
+      "source": "Photo image(10), adjacency from Excel / image(7); footprint estimated",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "third",
+      "name": "Стороннее здание",
+      "x": 32,
+      "z": 9,
+      "w": 39,
+      "d": 20,
+      "h": 7,
+      "style": "third",
+      "color": "#854b3b",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "shop1",
+      "name": "Цех 1 · заготовка / сварка / сборка",
+      "x": -121,
+      "z": 7,
+      "w": 45,
+      "d": 23,
+      "h": 6,
+      "style": "workshop",
+      "color": "#bdbaa5",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "shop2",
+      "name": "Цех 2 · сборка",
+      "x": -56,
+      "z": 7,
+      "w": 47,
+      "d": 14,
+      "h": 6,
+      "style": "workshop",
+      "color": "#a7b5b0",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "paint",
+      "name": "Малярка",
+      "x": -89,
+      "z": 7,
+      "w": 16,
+      "d": 14,
+      "h": 6,
+      "style": "workshop",
+      "color": "#a1aaa2",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "blast",
+      "name": "Пескоструй",
+      "x": -90,
+      "z": -7,
+      "w": 14,
+      "d": 12,
+      "h": 5,
+      "style": "workshop",
+      "color": "#b1b1a0",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "awning",
+      "name": "Тентовый участок",
+      "x": -78,
+      "z": -8,
+      "w": 9,
+      "d": 10,
+      "h": 4,
+      "style": "awning",
+      "color": "#bfa67a",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "office2",
+      "name": "Офис 2 · продажи",
+      "x": -27,
+      "z": 7,
+      "w": 11,
+      "d": 14,
+      "h": 4,
+      "style": "office",
+      "color": "#ded5b9",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "office1",
+      "name": "Офис 1",
+      "x": -119,
+      "z": 23,
+      "w": 20,
+      "d": 7,
+      "h": 3.8,
+      "style": "office",
+      "color": "#d5c6aa",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "weldstore",
+      "name": "Склад ЛГЦ → сварка",
+      "x": -101,
+      "z": -21,
+      "w": 12,
+      "d": 8,
+      "h": 3.5,
+      "style": "warehouse",
+      "color": "#81938c",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "axes",
+      "name": "Оси / трапы",
+      "x": -87,
+      "z": 26,
+      "w": 10,
+      "d": 6,
+      "h": 3.5,
+      "style": "warehouse",
+      "color": "#8d998f",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "parts",
+      "name": "Склад запчастей",
+      "x": -72,
+      "z": 57,
+      "w": 26,
+      "d": 8,
+      "h": 4,
+      "style": "warehouse",
+      "color": "#afab98",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "mini",
+      "name": "Мини-склад",
+      "x": -20,
+      "z": 31,
+      "w": 8,
+      "d": 6,
+      "h": 3.5,
+      "style": "warehouse",
+      "color": "#a8b2a0",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "garage1",
+      "name": "Гаражи · север",
+      "x": 35,
+      "z": 31,
+      "w": 27,
+      "d": 8,
+      "h": 4,
+      "style": "garage",
+      "color": "#8d9b94",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "garage2",
+      "name": "Гаражи · юг",
+      "x": 35,
+      "z": 57,
+      "w": 27,
+      "d": 8,
+      "h": 4,
+      "style": "garage",
+      "color": "#8d9b94",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    },
+    {
+      "id": "black",
+      "name": "Чёрный цех · труборез / рамы на цинк",
+      "x": 104,
+      "z": 8,
+      "w": 29,
+      "d": 44,
+      "h": 8,
+      "style": "black",
+      "color": "#465b5d",
+      "source": "Excel functional position; 2GIS proportional estimate",
+      "confidence": "PRELIMINARY",
+      "rotation": 0
+    }
+  ],
+  "zones": [
+    {
+      "name": "Рамы → цинк",
+      "x": -91,
+      "z": -65,
+      "w": 27,
+      "d": 24,
+      "kind": "frames"
+    },
+    {
+      "name": "Айвазовского · розница",
+      "x": -44,
+      "z": -64,
+      "w": 44,
+      "d": 17,
+      "kind": "trailers"
+    },
+    {
+      "name": "Молокова · готовые",
+      "x": -6,
+      "z": -47,
+      "w": 28,
+      "d": 9,
+      "kind": "trailers"
+    },
+    {
+      "name": "Погрузка на цинк",
+      "x": 34,
+      "z": -65,
+      "w": 42,
+      "d": 20,
+      "kind": "crane"
+    },
+    {
+      "name": "Контейнерщики",
+      "x": 73,
+      "z": -53,
+      "w": 16,
+      "d": 45,
+      "kind": "containers"
+    },
+    {
+      "name": "Ожидание пескоструя",
+      "x": -91,
+      "z": -38,
+      "w": 13,
+      "d": 14,
+      "kind": "frames"
+    },
+    {
+      "name": "Окрашенные → сборка",
+      "x": -65,
+      "z": 31,
+      "w": 31,
+      "d": 12,
+      "kind": "frames"
+    },
+    {
+      "name": "Клиенты · с колёс",
+      "x": -45,
+      "z": -10,
+      "w": 37,
+      "d": 8,
+      "kind": "trailers"
+    },
+    {
+      "name": "Клиенты · выдача",
+      "x": -45,
+      "z": 24,
+      "w": 36,
+      "d": 8,
+      "kind": "trailers"
+    },
+    {
+      "name": "Отправка дилерам",
+      "x": -35,
+      "z": 51,
+      "w": 34,
+      "d": 17,
+      "kind": "trailers"
+    },
+    {
+      "name": "Готовые · южная площадка",
+      "x": 24,
+      "z": 47,
+      "w": 30,
+      "d": 7,
+      "kind": "trailers"
+    },
+    {
+      "name": "Ремонт / брак",
+      "x": -123,
+      "z": -28,
+      "w": 18,
+      "d": 14,
+      "kind": "scrap"
+    },
+    {
+      "name": "Металл / приёмка",
+      "x": -147,
+      "z": 5,
+      "w": 13,
+      "d": 32,
+      "kind": "steel"
+    },
+    {
+      "name": "Номенклатура не уточнена · Excel A4/C4",
+      "x": -131,
+      "z": -61,
+      "w": 30,
+      "d": 22,
+      "kind": "trailers"
+    }
+  ],
+  "roads": [
+    {
+      "x": -38,
+      "z": 39,
+      "w": 227,
+      "d": 9
+    },
+    {
+      "x": -6,
+      "z": 0,
+      "w": 10,
+      "d": 90
+    },
+    {
+      "x": -76,
+      "z": -20,
+      "w": 144,
+      "d": 8
+    },
+    {
+      "x": 59,
+      "z": 0,
+      "w": 9,
+      "d": 135
+    },
+    {
+      "x": -153,
+      "z": -5,
+      "w": 8,
+      "d": 104
+    },
+    {
+      "x": -40,
+      "z": -83,
+      "w": 228,
+      "d": 7
+    },
+    {
+      "x": 80,
+      "z": 65,
+      "w": 135,
+      "d": 10
+    },
+    {
+      "x": 126,
+      "z": 4,
+      "w": 8,
+      "d": 125
+    }
+  ],
+  "boundary": [
+    [
+      -160,
+      -88
+    ],
+    [
+      86,
+      -88
+    ],
+    [
+      86,
+      -25
+    ],
+    [
+      128,
+      -25
+    ],
+    [
+      128,
+      72
+    ],
+    [
+      -160,
+      72
+    ]
+  ],
+  "rail": {
+    "x": -30,
+    "z": -96,
+    "length": 280
+  },
+  "anchors": [
+    {
+      "source": "image(6).png",
+      "feature": "red warehouse long side",
+      "pixels": 307,
+      "metres": 49
+    },
+    {
+      "source": "image(6).png",
+      "feature": "red warehouse short side",
+      "pixels": 87,
+      "metres": 14
+    }
+  ]
+}
