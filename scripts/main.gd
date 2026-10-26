@@ -221,9 +221,18 @@ func _update_camera() -> void:
     cam.position = focus+Vector3(sin(azimuth)*cos(elevation),sin(elevation),cos(azimuth)*cos(elevation))*650
     cam.look_at(focus)
     cam.size = distance
+    var occupied: Array[Rect2] = []
     for l in labels:
-        l.visible = label_mode and (l.get_meta("primary") if distance > 180 else (l.get_meta("major") or distance < 130))
+        var candidate: bool = label_mode and (l.get_meta("primary") if distance > 180 else (l.get_meta("major") or distance < 130))
+        l.visible = candidate
         l.pixel_size = distance/get_viewport().get_visible_rect().size.y*15.0/l.font_size
+        if not candidate: continue
+        var point := cam.unproject_position(l.position)
+        var width: float = minf(l.text.length()*8.0,450)
+        var rect := Rect2(point-Vector2(width/2,12),Vector2(width,24)).grow(3)
+        for previous in occupied:
+            if rect.intersects(previous): l.visible=false;break
+        if l.visible: occupied.append(rect)
     if scale_label != null:
         var metres: float = 5 if distance < 40 else (10 if distance < 100 else 25)
         var px: float = metres/distance*get_viewport().get_visible_rect().size.y
@@ -231,7 +240,7 @@ func _update_camera() -> void:
         scale_line.custom_minimum_size.x = px
         scale_line.size.x = px
     if OS.has_feature("web"):
-        var state := {"build":site.build,"capture_frame":Engine.get_process_frames(),"map":site.map_version,"view":current_view,"labels":label_mode,"distance":distance,"selected":selected.get_meta("data").id if selected!=null else "","edit":edit_mode,"selected_x":selected.position.x if selected!=null else 0}
+        var state := {"build":site.build,"capture_frame":Engine.get_process_frames(),"viewport_width":get_viewport().get_visible_rect().size.x,"map":site.map_version,"view":current_view,"labels":label_mode,"distance":distance,"selected":selected.get_meta("data").id if selected!=null else "","edit":edit_mode,"selected_x":selected.position.x if selected!=null else 0}
         var pick_points := {}
         for body in get_children():
             if body is StaticBody3D and body.has_meta("data"):

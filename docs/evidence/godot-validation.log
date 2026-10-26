@@ -13,4 +13,7 @@ loading_editor_layout: begin: Loading editor steps: 5
 loading_editor_layout: end
 Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
 
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+PASS mesh invariants: outward roof normals, metric AABB, orthogonal rotated details
 PASS 16 rotated footprints; no building/road/fence collisions; exclusion clear; two-source calibration; shop-1 orientation and eastern footprint scale.

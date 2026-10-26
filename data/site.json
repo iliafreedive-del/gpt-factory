@@ -1,5 +1,5 @@
 {
-  "build": "1.1.0",
+  "build": "1.1.1",
   "map_version": "1.1.0",
   "units": "metres",
   "orientation": "Screen-up follows supplied 2GIS / Excel; true north unverified",
@@ -112,8 +112,8 @@
       "h": 3.6,
       "style": "office",
       "color": "#c5b396",
-      "rotation": 0,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "rotation": 180,
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; west-facing brick entrance from annotated image(7)",
       "confidence": "ПО КАРТЕ · ОЦЕНКА"
     },
     {

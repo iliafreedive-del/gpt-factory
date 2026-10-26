@@ -41,6 +41,11 @@ jobs:
           godot --headless --path . --quit-after 30 > /tmp/godot-runtime.log 2>&1 || { cat /tmp/godot-runtime.log; exit 1; }
           cat /tmp/godot-runtime.log
           if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-runtime.log; then exit 1; fi
+      - name: Validate mesh normals and scale
+        run: |
+          godot --headless --path . --script res://tools/check_meshes.gd > /tmp/godot-meshes.log 2>&1 || { cat /tmp/godot-meshes.log; exit 1; }
+          cat /tmp/godot-meshes.log
+          if grep -Eq 'SCRIPT ERROR|Parse Error|Failed to load script|^ERROR:' /tmp/godot-meshes.log; then exit 1; fi
       - name: Export Web
         run: |
           mkdir -p build

@@ -36,10 +36,11 @@ const fs = require('fs');
   }
   await page.keyboard.press('1');await page.keyboard.press('l');
   await page.waitForFunction(()=>window.factoryState?.labels===true,{},{timeout:60000});
-  await page.waitForTimeout(2000);
+  await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,{},{timeout:120000});
   await page.screenshot({path:path.join(out,'labels.png'),timeout:120000});
   await page.setViewportSize({width:800,height:600});
-  await page.waitForTimeout(2000);
+  await page.waitForFunction(()=>window.factoryState.viewport_width===800,{},{timeout:60000});
+  await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,{},{timeout:120000});
   await page.screenshot({path:path.join(out,'compact.png'),timeout:120000});
   await browser.close();
   if(errors.length) throw new Error(errors.join('\n'));

@@ -86,7 +86,7 @@ func roof(center: Vector3, w: float, d: float, rise: float, color: String) -> vo
     var r := Vector3(-w/2,rise,0)
     var s := Vector3(w/2,rise,0)
     for face in [[a,r,s],[a,s,b],[r,c,e],[r,e,s],[a,c,r],[b,s,e]]:
-        for v in face: st.add_vertex(v)
+        for v in [face[0],face[2],face[1]]: st.add_vertex(v)
     st.generate_normals()
     var node := MeshInstance3D.new()
     node.mesh = st.commit()
@@ -139,13 +139,14 @@ func building(b: Dictionary) -> void:
         for x in range(int(w/0.8)):
             for side in [-1.0,1.0]:
                 box(p+Vector3(-w/2+x*0.8, h/2+0.3,side*(d/2+0.04)),Vector3(0.045,h-0.7,0.07),"#879b9b" if b.style != "warehouse" else "#bb694c")
+    var window_y: float = 1.7 if office else h*0.64
     for side in [-1.0,1.0]:
         box(p+Vector3(0,h-0.15,side*(d/2+0.25)),Vector3(w+0.6,0.17,0.22),"#d0d5c9")
         for x in range(int(w/8) if b.get("windows",true) else 0):
             var xx: float = -w/2+4+x*8
-            box(p+Vector3(xx,h*0.64,side*(d/2+0.12)),Vector3(2.9,1.15,0.12),"#e0e6d4")
-            box(p+Vector3(xx,h*0.64,side*(d/2+0.2)),Vector3(2.6,0.88,0.08),"#496f79")
-            box(p+Vector3(xx,h*0.64,side*(d/2+0.27)),Vector3(0.08,0.9,0.08),"#b2c8c6")
+            box(p+Vector3(xx,window_y,side*(d/2+0.12)),Vector3(2.9,1.15,0.12),"#e0e6d4")
+            box(p+Vector3(xx,window_y,side*(d/2+0.2)),Vector3(2.6,0.88,0.08),"#496f79")
+            box(p+Vector3(xx,window_y,side*(d/2+0.27)),Vector3(0.08,0.9,0.08),"#b2c8c6")
         # gutters / downpipes
         box(p+Vector3(w/2-0.4,h/2,side*(d/2+0.35)),Vector3(0.15,h,0.15),"#697e7d")
     if b.style == "masonry" or office:
@@ -158,16 +159,27 @@ func building(b: Dictionary) -> void:
                 box(p+Vector3(side*(w/2+0.05),h/2,zz),Vector3(0.06,h-0.2,0.035),"#91a4a4" if b.style not in ["warehouse","third"] else "#ab7056")
     # Doors face the site roads. Loading portals occupy end wall.
     var doors: int = 4 if b.style == "black" else (3 if b.style == "garage" else 1)
-    var portal_h: float = 5.0 if b.style == "construction" else 4.0
-    var portal_w: float = 5.2 if b.style == "construction" else (2.0 if b.style == "garage" else 3.8)
+    var portal_h: float = 2.3 if office else (5.0 if b.style == "construction" else 4.0)
+    var portal_w: float = 1.1 if office else (5.2 if b.style == "construction" else (2.0 if b.style == "garage" else 3.8))
+    var threshold: float = 0.35 if office else 0.0
     for i in doors:
         var zz: float = (i-(doors-1)*0.5)*(d/4 if b.style == "black" else 2.5)
-        box(p+Vector3(w/2+0.08,portal_h/2,zz),Vector3(0.16,portal_h+0.3,portal_w+0.4),"#b4c0b8")
-        box(p+Vector3(w/2+0.18,portal_h/2,zz),Vector3(0.12,portal_h,portal_w),"#172b32" if b.style == "construction" else "#354d55")
-        for y in range(0 if b.style == "construction" else 7):
+        box(p+Vector3(w/2+0.08,threshold+portal_h/2,zz),Vector3(0.16,portal_h+0.3,portal_w+0.4),"#b4c0b8")
+        box(p+Vector3(w/2+0.18,threshold+portal_h/2,zz),Vector3(0.12,portal_h,portal_w),"#172b32" if b.style == "construction" else "#354d55")
+        for y in range(0 if office or b.style == "construction" else 7):
             box(p+Vector3(w/2+0.26,0.4+y*0.5,zz),Vector3(0.06,0.05,portal_w),"#657b7b")
-        box(p+Vector3(w/2+3,0.07,zz),Vector3(5.8,0.13,6),"#b7b9a6")
-        for sign in [-1,1]: box(p+Vector3(w/2+1.0,0.7,zz+sign*(portal_w/2+0.7)),Vector3(0.2,1.4,0.2),"#d0ad57")
+        if office:
+            # Brick entrance porch from the annotated workshop reference, not a freight shutter.
+            for step in range(3):
+                box(p+Vector3(w/2+1.9-step*0.55,0.06+step*0.06,zz),Vector3(1.2,0.12+step*0.12,2.2),"#ae9275")
+            box(p+Vector3(w/2+1.1,2.9,zz),Vector3(2.5,0.15,2.8),"#697e78")
+            for side in [-1,1]:
+                box(p+Vector3(w/2+2.1,1.4,zz+side*1.25),Vector3(0.075,2.8,0.075),"#617b75")
+                beam(p+Vector3(w/2+0.3,1.0,zz+side*1.25),p+Vector3(w/2+2.2,0.8,zz+side*1.25),0.055,"#617b75")
+            box(p+Vector3(w/2+0.26,1.8,zz),Vector3(0.04,0.9,0.7),"#71908f")
+        else:
+            box(p+Vector3(w/2+3,0.07,zz),Vector3(5.8,0.13,6),"#b7b9a6")
+            for sign in [-1,1]: box(p+Vector3(w/2+1.0,0.7,zz+sign*(portal_w/2+0.7)),Vector3(0.2,1.4,0.2),"#d0ad57")
     box(p+Vector3(-w*0.25,1.15,d/2+0.12),Vector3(1,2.3,0.18),"#455e62")
     box(p+Vector3(-w*0.25,2.5,d/2+0.6),Vector3(1.7,0.13,1.3),"#798e88")
     if b.style == "construction":
@@ -388,7 +400,7 @@ func board(points: PackedVector2Array, depth: float, top_color: String, edge_col
         var b := Vector3(q.x,0,q.y)
         var c := b-Vector3(0,depth,0)
         var d := a-Vector3(0,depth,0)
-        for vertex in [a,b,c,a,c,d]:st.add_vertex(vertex)
+        for vertex in [a,c,b,a,d,c]:st.add_vertex(vertex)
     st.generate_normals()
     var node := MeshInstance3D.new()
     node.mesh = st.commit()

@@ -4,10 +4,11 @@ cd "$(dirname "$0")/.."
 GODOT_BIN=${GODOT_BIN:-godot}
 logs=${FACTORY_LOG_DIR:-/tmp/alaska-validation}
 mkdir -p "$logs"
-for target in import runtime; do
+for target in import runtime meshes; do
   case "$target" in
     import) args=(--editor --import --quit);;
     runtime) args=(--quit-after 30);;
+    meshes) args=(--script res://tools/check_meshes.gd);;
   esac
   "$GODOT_BIN" --headless --path . "${args[@]}" > "$logs/$target.log" 2>&1 || { cat "$logs/$target.log"; exit 1; }
   cat "$logs/$target.log"
