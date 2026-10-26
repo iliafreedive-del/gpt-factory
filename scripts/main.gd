@@ -15,6 +15,7 @@ var edit_mode := false
 
 func _ready() -> void:
     _ground()
+    _site_layout()
     _road(Vector3(0, 0.04, 31), Vector2(245, 13))
     _road(Vector3(15, 0.04, -35), Vector2(12, 130))
     # Illustrated site topology, NOT an accurate georeferenced survey.
@@ -24,6 +25,7 @@ func _ready() -> void:
     _building("Красный склад комплектующих", Vector3(-21, 0, -55), Vector3(62, 7, 22), Color("#a84939"), true)
     _building("Цех 2 • малярка / сборка", Vector3(-57, 0, 8), Vector3(81, 8, 24), Color("#a7afb0"), true)
     _building("Цех 1 • сварка / сборка", Vector3(-140, 0, 5), Vector3(60, 8, 24), Color("#96aaa9"), true)
+    _site_details()
     for i in range(12):
         _crate(Vector3(-40 + (i % 6) * 5, 0, -78 + int(i / 6) * 5))
     _camera()
@@ -210,3 +212,94 @@ func _process(delta: float) -> void:
         if Input.is_key_pressed(KEY_LEFT): selected.position.x -= step
         if Input.is_key_pressed(KEY_RIGHT): selected.position.x += step
     _update_cam()
+
+# Site geometry is a traceable draft based on annotated 2GIS screenshots.
+# Every coordinate uses metres; surveyed measurements can replace these constants.
+func _site_layout() -> void:
+    _zone("Двор производства", Vector3(-72, 0.015, -14), Vector2(214, 119), Color("#d9d4bf"))
+    _zone("ЛГЦ / зона нового корпуса", Vector3(98, 0.017, -78), Vector2(141, 73), Color("#cbc9bc"))
+    _zone("Открытый склад / чёрные рамы", Vector3(-71, 0.025, -97), Vector2(72, 25), Color("#f0e5c9"))
+    _zone("Подъезд и маневрирование", Vector3(80, 0.027, -28), Vector2(154, 23), Color("#bcb9b0"))
+    _zone("Сборка и выдача", Vector3(-100, 0.029, 45), Vector2(108, 18), Color("#e6dbbe"))
+    _zone("Площадка готовой продукции", Vector3(-89, 0.032, 71), Vector2(128, 30), Color("#eee0b6"))
+    _zone("Отгрузка дилерам", Vector3(-10, 0.033, 74), Vector2(48, 30), Color("#e6d8b0"))
+    _road_between(Vector3(-179, 0.065, -35), Vector3(-179, 0.065, 37), 9.0)
+    _road_between(Vector3(-179, 0.065, -35), Vector3(-102, 0.065, -35), 9.0)
+    _road_between(Vector3(-102, 0.065, -35), Vector3(-102, 0.065, -13), 9.0)
+    _road_between(Vector3(15, 0.065, 31), Vector3(145, 0.065, 31), 11.0)
+    _road_between(Vector3(15, 0.065, 31), Vector3(15, 0.065, 92), 11.0)
+    _road_between(Vector3(15, 0.065, -35), Vector3(15, 0.065, -115), 11.0)
+    _road_between(Vector3(15, 0.065, -35), Vector3(151, 0.065, -35), 11.0)
+    _road_between(Vector3(151, 0.065, -35), Vector3(151, 0.065, 31), 9.0)
+    _road_between(Vector3(-153, 0.065, 64), Vector3(-25, 0.065, 64), 8.0)
+    # Approximate property boundary; the third-party building is outside it.
+    var edge: Array[Vector3] = [
+        Vector3(-204, 0.14, -123), Vector3(156, 0.14, -123),
+        Vector3(156, 0.14, -29), Vector3(155, 0.14, 36),
+        Vector3(22, 0.14, 36), Vector3(22, 0.14, 101),
+        Vector3(-202, 0.14, 101), Vector3(-204, 0.14, -123)
+    ]
+    for i in range(edge.size()-1):
+        _boundary(edge[i], edge[i+1])
+    _road_between(Vector3(22, 0.07, 101), Vector3(22, 0.07, 132), 11.0)
+
+func _zone(title: String, center: Vector3, dimensions: Vector2, tint: Color) -> void:
+    _part(self, Vector3(dimensions.x, 0.065, dimensions.y), center, tint)
+    var t := Label3D.new()
+    t.text = title
+    t.font_size = 30
+    t.pixel_size = 0.035
+    t.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+    t.position = center + Vector3(0, 0.7, 0)
+    t.modulate = Color("#536056")
+    t.outline_size = 4
+    add_child(t)
+
+func _road_between(a: Vector3, b: Vector3, width_m: float) -> void:
+    var v := b-a
+    var center := (a+b)*0.5
+    var piece := _part(self, Vector3(width_m, 0.075, v.length()), center, Color("#aaa79b"))
+    piece.rotation.y = atan2(-v.x, v.z)
+
+func _boundary(a: Vector3, b: Vector3) -> void:
+    var v := b-a
+    var fence := _part(self, Vector3(0.14, 1.6, v.length()), (a+b)*0.5+Vector3(0,0.75,0), Color("#6b7474"))
+    fence.rotation.y = atan2(-v.x, v.z)
+    for i in range(int(v.length()/8.0)+1):
+        var p := a + v * (float(i)/maxf(1.0,float(int(v.length()/8.0)))) 
+        _part(self, Vector3(0.22, 2.1, 0.22), p+Vector3(0,1.0,0), Color("#49545a"))
+
+func _site_details() -> void:
+    # Visible production staging, compact material piles and truck access.
+    _zone("Ожидание пескоструя", Vector3(-154, 0.10, -21), Vector2(34, 14), Color("#c8b7a3"))
+    _zone("Ожидание малярки", Vector3(-72, 0.10, 34), Vector2(44, 9), Color("#c2b8a5"))
+    _zone("Рамы и траверсы", Vector3(-72, 0.10, -103), Vector2(65, 13), Color("#e0d5b6"))
+    _zone("Склад готовых прицепов", Vector3(-95, 0.10, 73), Vector2(97, 24), Color("#e4d7ae"))
+    _zone("Контейнерная площадка", Vector3(49, 0.11, -14), Vector2(56, 17), Color("#d0c4ae"))
+    for i in range(8):
+        _part(self, Vector3(5.6, 2.5, 2.4), Vector3(26+float(i%4)*7.0, 1.3, -17+float(i/4)*3.6), Color("#697c83") if i%2 == 0 else Color("#a9734c"))
+    for i in range(7):
+        _part(self, Vector3(5.5, 0.28, 2.2), Vector3(-98+float(i)*8.0, 0.3, -105), Color("#414a4f"))
+    for i in range(12):
+        var x := -190.0 + float(i%6)*7.5
+        var z := 83.0 + float(i/6)*8.0
+        _part(self, Vector3(2.1, 0.7, 4.1), Vector3(x,0.45,z), Color("#95a9a9"))
+    for i in range(17):
+        var x := -196.0 + float(i%9)*25.0
+        var z := -129.0 if i < 9 else 113.0
+        _tree(Vector3(x,0,z))
+    for i in range(7):
+        _tree(Vector3(171.0,0,-120+float(i)*28))
+    _zone("ЛГЦ: въезд и разгрузка", Vector3(61,0.095,-38), Vector2(45,12), Color("#dad1bd"))
+    _zone("Строящийся цех: подъезд", Vector3(119,0.095,-38), Vector2(43,12), Color("#dbd2bf"))
+
+func _tree(pos: Vector3) -> void:
+    _part(self, Vector3(0.45,2.3,0.45), pos+Vector3(0,1.2,0), Color("#806c53"))
+    var crown := MeshInstance3D.new()
+    var mesh := SphereMesh.new()
+    mesh.radius = 2.4
+    mesh.height = 4.8
+    crown.mesh = mesh
+    crown.position = pos+Vector3(0,4.3,0)
+    crown.material_override = _material(Color("#7e9b65"))
+    add_child(crown)
