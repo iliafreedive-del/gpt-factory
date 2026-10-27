@@ -35,5 +35,25 @@
     255,
     262
   ],
-  "audio_transcribed": false
+  "audio_transcribed": true,
+  "additional_frame_timestamps_seconds": [
+    8,
+    28,
+    64,
+    104,
+    138,
+    148,
+    164,
+    180,
+    192,
+    248
+  ],
+  "owner_route_anchor": {
+    "start": "Офис 1, синий крестик на присланном игровом скриншоте",
+    "movement": "Далее по кругу, по синей разметке владельца",
+    "authority": "Прямое сообщение владельца после передачи видео",
+    "metric_camera_track": false,
+    "inline_route_screenshot_archived": false
+  },
+  "audio_transcription_status": "Local faster-whisper base/small int8, noisy and unverified; not a verbatim transcript or survey"
 }
