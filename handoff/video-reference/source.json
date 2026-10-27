@@ -1,0 +1,39 @@
+{
+  "name": "IMG_1890.mov",
+  "size": 289546560,
+  "sha256": "1745ab257254c7b822b8ecee2956c7b54d6d388b12f35e7fcde8c5edfb2a48f2",
+  "created": "2026-10-27T05:59:16+00:00",
+  "modified": "2026-10-27T05:49:55+00:00",
+  "mime_type": "video/quicktime",
+  "public_url": "https://disk.yandex.ru/i/P9FyGjpUjDe2qg",
+  "duration_seconds": 263.358333,
+  "encoded_size": [
+    1920,
+    1080
+  ],
+  "display_orientation": "portrait, rotation metadata applied by ffmpeg",
+  "original_local_path": "/workspace/factory-reference/video/IMG_1890.mov",
+  "original_in_git": false,
+  "frame_timestamps_seconds": [
+    5,
+    20,
+    35,
+    50,
+    60,
+    75,
+    90,
+    105,
+    120,
+    135,
+    150,
+    165,
+    180,
+    195,
+    210,
+    225,
+    240,
+    255,
+    262
+  ],
+  "audio_transcribed": false
+}
