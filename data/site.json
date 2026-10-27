@@ -1,6 +1,6 @@
 {
-  "build": "1.1.3",
-  "map_version": "1.1.2",
+  "build": "1.2.0",
+  "map_version": "1.2.0",
   "units": "metres",
   "orientation": "Screen-up follows supplied 2GIS / Excel; true north unverified",
   "trace": {
@@ -34,13 +34,20 @@
       "z": -37.551,
       "w": 49,
       "d": 14,
-      "h": 6.5,
+      "h": 4.5,
       "style": "warehouse",
-      "color": "#a2523c",
+      "color": "#a08a77",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; original image(6) connected ruler readings",
       "confidence": "ОПОРА 2ГИС ±2 м",
-      "windows": false
+      "windows": false,
+      "roof_color": "#926f5d",
+      "front_sign": -1,
+      "door_h": 3.45,
+      "door_w": 4.1,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Video 01:16–02:32: visual eave/door/vehicle proportions; approximate, perspective not rectified",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "lgc",
@@ -49,13 +56,20 @@
       "z": -40.0,
       "w": 38,
       "d": 12,
-      "h": 6.5,
+      "h": 5.2,
       "style": "metal",
-      "color": "#a7b8b9",
+      "color": "#c6ccc5",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; original image(6) connected ruler readings",
       "confidence": "ОПОРА 2ГИС ±2 м",
-      "windows": false
+      "windows": false,
+      "roof_color": "#9aa69f",
+      "front_sign": -1,
+      "door_h": 3.9,
+      "door_w": 3.8,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Video 01:16–02:32: visual eave/door/vehicle proportions; approximate, perspective not rectified",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "new",
@@ -64,13 +78,20 @@
       "z": -25.918,
       "w": 38,
       "d": 13,
-      "h": 7.5,
+      "h": 6.3,
       "style": "construction",
-      "color": "#b7c7c7",
+      "color": "#c2cac5",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "windows": false
+      "windows": false,
+      "roof_color": "#a8b4ae",
+      "front_sign": -1,
+      "door_h": 4.8,
+      "door_w": 4.7,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Video 01:16–02:32: visual eave/door/vehicle proportions; approximate, perspective not rectified",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "third",
@@ -79,13 +100,20 @@
       "z": -8.98,
       "w": 39,
       "d": 20,
-      "h": 7,
+      "h": 5.5,
       "style": "third",
-      "color": "#814f41",
+      "color": "#956f5a",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "windows": false
+      "windows": false,
+      "roof_color": "#98644f",
+      "front_sign": -1,
+      "door_h": 4.0,
+      "door_w": 4.0,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Video 01:16–02:32: visual eave/door/vehicle proportions; approximate, perspective not rectified",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "shop1",
@@ -96,11 +124,19 @@
       "d": 27,
       "h": 6.5,
       "style": "masonry",
-      "color": "#b7ad94",
+      "color": "#c2c4b6",
       "rotation": -90,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_bays": 2
+      "roof_bays": 2,
+      "roof_color": "#87928b",
+      "ribbon_faces": [
+        "-z"
+      ],
+      "ribbon_y": 2.3,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "office1",
@@ -111,10 +147,17 @@
       "d": 7,
       "h": 3.6,
       "style": "office",
-      "color": "#c5b396",
+      "color": "#b8a38b",
       "rotation": 180,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; west-facing brick entrance from annotated image(7)",
-      "confidence": "ПО КАРТЕ · ОЦЕНКА"
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "arched_entry": true,
+      "door_h": 2.1,
+      "door_w": 1.05,
+      "roof_color": "#969889",
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "shop2",
@@ -125,11 +168,21 @@
       "d": 13,
       "h": 5.8,
       "style": "masonry",
-      "color": "#b1b1a0",
+      "color": "#c3c5b7",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat"
+      "roof_type": "flat",
+      "roof_color": "#a2a693",
+      "ribbon_faces": [
+        "-z",
+        "+z"
+      ],
+      "ribbon_y": 1.9,
+      "roof_weathering": true,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "office2",
@@ -140,10 +193,15 @@
       "d": 13,
       "h": 4,
       "style": "office",
-      "color": "#d4c4a7",
+      "color": "#c6c8b8",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
-      "confidence": "ПО КАРТЕ · ОЦЕНКА"
+      "confidence": "ПО КАРТЕ · ОЦЕНКА",
+      "roof_color": "#9ba28f",
+      "roof_weathering": true,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "blast",
@@ -154,11 +212,17 @@
       "d": 10,
       "h": 5,
       "style": "masonry",
-      "color": "#aaa796",
+      "color": "#aaa993",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat"
+      "roof_type": "flat",
+      "roof_color": "#949b8c",
+      "exhaust": true,
+      "roof_weathering": true,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "paint",
@@ -169,11 +233,17 @@
       "d": 13,
       "h": 5.8,
       "style": "masonry",
-      "color": "#b1b1a0",
+      "color": "#c1c4b9",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat"
+      "roof_type": "flat",
+      "roof_color": "#969f93",
+      "blue_lower": true,
+      "roof_weathering": true,
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "awning",
@@ -184,11 +254,15 @@
       "d": 15,
       "h": 4,
       "style": "awning",
-      "color": "#c6ad77",
+      "color": "#bfbca5",
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "windows": false
+      "windows": false,
+      "roof_color": "#c1c0ab",
+      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "weldstore",
@@ -203,7 +277,9 @@
       "rotation": 0,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "windows": false
+      "windows": false,
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "black",
@@ -218,7 +294,9 @@
       "rotation": -6,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_bays": 4
+      "roof_bays": 4,
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 2.0
     },
     {
       "id": "black_annex",
@@ -233,7 +311,9 @@
       "rotation": -6,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat"
+      "roof_type": "flat",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "east_aux1",
@@ -248,7 +328,9 @@
       "rotation": -6,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat"
+      "roof_type": "flat",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     },
     {
       "id": "east_aux2",
@@ -263,7 +345,9 @@
       "rotation": -6,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat"
+      "roof_type": "flat",
+      "height_source": "Typological / visual estimate, not measured in video",
+      "height_uncertainty_m": 1.0
     }
   ],
   "zones": [
@@ -275,7 +359,9 @@
       "d": 21,
       "kind": "frames",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Айвазовского · розница",
@@ -285,7 +371,9 @@
       "d": 14,
       "kind": "trailers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Молокова · готовые",
@@ -295,7 +383,9 @@
       "d": 11,
       "kind": "trailers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Погрузка на цинк",
@@ -305,7 +395,9 @@
       "d": 23,
       "kind": "crane",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Контейнерщики",
@@ -315,7 +407,9 @@
       "d": 65,
       "kind": "containers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Ожидание пескоструя",
@@ -325,7 +419,9 @@
       "d": 15,
       "kind": "frames",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Клиенты · с колёс",
@@ -335,7 +431,9 @@
       "d": 5,
       "kind": "trailers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Клиенты · выдача",
@@ -345,7 +443,9 @@
       "d": 5,
       "kind": "trailers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Окрашенные → сборка",
@@ -355,7 +455,9 @@
       "d": 5,
       "kind": "frames",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Отправка дилерам",
@@ -365,7 +467,9 @@
       "d": 9,
       "kind": "trailers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Ремонт / брак",
@@ -375,7 +479,9 @@
       "d": 13,
       "kind": "scrap",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     },
     {
       "name": "Номенклатура не уточнена · Excel A4/C4",
@@ -385,7 +491,9 @@
       "d": 20,
       "kind": "trailers",
       "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
-      "confidence": "ОЦЕНКА · не фактический инвентарный учёт"
+      "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
+      "paving": "concrete",
+      "markings": "illustrative corner ticks, not observed painted boundary"
     }
   ],
   "roads": [
@@ -452,7 +560,9 @@
       "width": 3.0,
       "markings": false,
       "source": "Green road centreline on user annotated 2GIS",
-      "confidence": "Trace ±2m; narrow 3m service lane estimated, clear widths unmeasured"
+      "confidence": "Trace ±2m; narrow 3m service lane estimated, clear widths unmeasured",
+      "surface": "concrete",
+      "surface_source": "Video walkthrough: slabbed working yard, extent estimated; route centreline unchanged"
     },
     {
       "id": "west_north_spur",
@@ -469,7 +579,9 @@
       "width": 5,
       "markings": false,
       "source": "Green road centreline on user annotated 2GIS",
-      "confidence": "Trace ±2m; width estimated"
+      "confidence": "Trace ±2m; width estimated",
+      "surface": "concrete",
+      "surface_source": "Video walkthrough: slabbed working yard, extent estimated; route centreline unchanged"
     },
     {
       "id": "factory_south",
@@ -528,9 +640,11 @@
         ]
       ],
       "width": 7,
-      "markings": true,
+      "markings": false,
       "source": "Green road centreline on user annotated 2GIS",
-      "confidence": "Trace ±2m; width estimated"
+      "confidence": "Trace ±2m; width estimated",
+      "surface": "concrete",
+      "surface_source": "Video walkthrough: slabbed working yard, extent estimated; route centreline unchanged"
     },
     {
       "id": "lgc_access",
@@ -563,7 +677,9 @@
       "width": 5.5,
       "markings": false,
       "source": "Green road centreline on user annotated 2GIS",
-      "confidence": "Trace ±2m; width estimated"
+      "confidence": "Trace ±2m; width estimated",
+      "surface": "concrete",
+      "surface_source": "Video walkthrough: slabbed working yard, extent estimated; route centreline unchanged"
     },
     {
       "id": "main_connection",
@@ -584,7 +700,9 @@
       "width": 6,
       "markings": false,
       "source": "Green road centreline on user annotated 2GIS",
-      "confidence": "Trace ±2m; width estimated"
+      "confidence": "Trace ±2m; width estimated",
+      "surface": "concrete",
+      "surface_source": "Video walkthrough: slabbed working yard, extent estimated; route centreline unchanged"
     },
     {
       "id": "black_entry",
@@ -1235,6 +1353,275 @@
         183.673,
         103.122
       ]
+    },
+    {
+      "kind": "frames_stack",
+      "point": [
+        -82.3,
+        -1
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 90,
+      "levels": 4,
+      "w": 4.5,
+      "d": 1.85,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "frames_stack",
+      "point": [
+        -82.3,
+        -6
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 90,
+      "levels": 4,
+      "w": 4.5,
+      "d": 1.85,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "frames_stack",
+      "point": [
+        -82.3,
+        -11
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 90,
+      "levels": 4,
+      "w": 4.5,
+      "d": 1.85,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "frames_stack",
+      "point": [
+        -82.3,
+        -16
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 90,
+      "levels": 4,
+      "w": 4.5,
+      "d": 1.85,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "frames_stack",
+      "point": [
+        -60,
+        5.4
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 0,
+      "levels": 4,
+      "w": 4.5,
+      "d": 1.85,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "frames_stack",
+      "point": [
+        -54,
+        5.4
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 0,
+      "levels": 4,
+      "w": 4.5,
+      "d": 1.85,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "person",
+      "point": [
+        13,
+        -37
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": -30,
+      "w": 0.65,
+      "d": 0.65
+    },
+    {
+      "kind": "person",
+      "point": [
+        12,
+        -26
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 40,
+      "w": 0.65,
+      "d": 0.65
+    },
+    {
+      "kind": "person",
+      "point": [
+        -5,
+        11
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 90,
+      "hi_vis": false,
+      "w": 0.65,
+      "d": 0.65
+    },
+    {
+      "kind": "person",
+      "point": [
+        -78,
+        -24
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 25,
+      "w": 0.65,
+      "d": 0.65
+    },
+    {
+      "kind": "person",
+      "point": [
+        -43,
+        -50
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 30,
+      "w": 0.65,
+      "d": 0.65
+    },
+    {
+      "kind": "person",
+      "point": [
+        -89,
+        27
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "rotation": 0,
+      "w": 0.65,
+      "d": 0.65
+    },
+    {
+      "kind": "trailer",
+      "point": [
+        9,
+        -34
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "tandem": false,
+      "covered": false,
+      "w": 4.5,
+      "d": 2.3,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "trailer",
+      "point": [
+        8,
+        -27
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "tandem": true,
+      "covered": true,
+      "w": 5.6,
+      "d": 2.55,
+      "footprint_offset": [
+        0.7,
+        0
+      ]
+    },
+    {
+      "kind": "car",
+      "point": [
+        10,
+        -43
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "color": "#c6cac0",
+      "w": 4.5,
+      "d": 1.85
+    },
+    {
+      "kind": "car",
+      "point": [
+        1,
+        4
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "color": "#bec6ba",
+      "w": 4.5,
+      "d": 1.85
+    },
+    {
+      "kind": "car",
+      "point": [
+        1,
+        7
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "color": "#566868",
+      "w": 4.5,
+      "d": 1.85
+    },
+    {
+      "kind": "car",
+      "point": [
+        1,
+        10
+      ],
+      "source": "Walkthrough visual reference, approximate display position; illustrative count",
+      "confidence": "ОЦЕНКА",
+      "color": "#b9ad96",
+      "w": 4.5,
+      "d": 1.85
+    },
+    {
+      "kind": "person",
+      "point": [
+        -112.2,
+        20.5
+      ],
+      "rotation": 90,
+      "w": 0.65,
+      "d": 0.65,
+      "source": "Illustrative adult at office-1 arched entry, video landmark; estimated position",
+      "confidence": "ОЦЕНКА"
     }
   ],
   "tree_lines": [
@@ -1376,6 +1763,14 @@
       "scale_bar": false,
       "use": "Qualitative check of retained roof outlines, annexes and shared yard surfacing; not a source for current inventory or new workshop absence",
       "binary_archived": false
+    },
+    {
+      "id": "walkthrough_IMG_1890",
+      "url": "https://disk.yandex.ru/i/P9FyGjpUjDe2qg",
+      "sha256": "1745ab257254c7b822b8ecee2956c7b54d6d388b12f35e7fcde8c5edfb2a48f2",
+      "local_review": "handoff/video-reference/ROUTE.md",
+      "owner_anchor": "Start at office 1, blue cross; walk around marked loop",
+      "usage": "Exterior materials, relative silhouettes, human/vehicle scale; not surveyed metric camera tracking"
     }
   ],
   "surfaces": [
@@ -1440,8 +1835,52 @@
         ]
       ],
       "color": "#9da49b",
-      "source": "historic_satellite_received_2026_10_27; broad shared grey yard visible around assembly buildings. Polygon is proportionally placed on current annotated map, not traced from a georeferenced image.",
-      "confidence": "ОЦЕНКА · тип покрытия и современные границы не подтверждены"
+      "source": "historic_satellite_received_2026_10_27; broad shared grey yard visible around assembly buildings. Polygon is proportionally placed on current annotated map, not traced from a georeferenced image. Video IMG_1890.mov confirms slabs on shown working-yard sections.",
+      "confidence": "ОЦЕНКА · бетонные плиты видны на видео; точные границы и размер плит не измерены",
+      "paving": "concrete"
+    },
+    {
+      "id": "northern_working_yard",
+      "points": [
+        [
+          -110,
+          -86
+        ],
+        [
+          68,
+          -86
+        ],
+        [
+          74,
+          -47
+        ],
+        [
+          -45,
+          -23
+        ],
+        [
+          -111,
+          -30
+        ]
+      ],
+      "color": "#9da49b",
+      "paving": "concrete",
+      "source": "Video 01:24–02:32: broad slab yard between warehouse, stock, crane and metal workshops; extent aligned approximately to existing site",
+      "confidence": "ОЦЕНКА · контур и размер плит не измерены"
     }
-  ]
+  ],
+  "scale_references": {
+    "adult_height_m": 1.75,
+    "small_trailer_overall_m": [
+      4.4,
+      2.3
+    ],
+    "tandem_trailer_overall_m": [
+      5.5,
+      2.5
+    ],
+    "car_length_m": 4.35,
+    "source": "Illustrative familiar size references; Alaska trailer product dimensions and employee heights not supplied",
+    "confidence": "ОЦЕНКА · ориентиры пропорций, не реальные замеры изделий"
+  }
 }

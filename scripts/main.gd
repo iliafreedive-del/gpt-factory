@@ -17,6 +17,7 @@ var scale_label: Label
 var scale_line: ColorRect
 var tools_panel: PanelContainer
 var details_panel: PanelContainer
+var version_panel: PanelContainer
 var label_mode := false
 var edit_mode := false
 var current_view := 1
@@ -69,12 +70,12 @@ func _grounds() -> void:
     kit.board(_points(site.presentation_outline),3.8,"#b9bdac","#617573")
     for parcel in site.parcels: kit.polygon(_points(parcel.points),0.025,parcel.color)
     for surface in site.get("surfaces",[]):
-        kit.polygon(_points(surface.points),0.045,surface.color)
+        kit.polygon(_points(surface.points),0.045,surface.color,kit.concrete_material() if surface.get("paving","") == "concrete" else null)
     # The presentation board is cut away at the excluded southern neighbours;
     # the exclusion polygon is data for checks only, never a rendered quarter.
     for r in site.roads:
         var points := _points(r.points)
-        kit.road(points,r.width)
+        kit.road(points,r.width,r.get("surface","asphalt"))
         if r.markings:
             for i in range(points.size()-1):
                 var a := Vector3(points[i].x,0.14,points[i].y)
@@ -85,22 +86,24 @@ func _grounds() -> void:
                     kit.beam(at,at+(b-a).normalized()*2.7,0.09,"#d4d3b6")
 
 func _zone(z: Dictionary) -> void:
-    var p := Vector3(z.x,0,z.z)
-    kit.box(p+Vector3(0,0.11,0),Vector3(z.w,0.12,z.d),"#c7c8b2")
+    var p := Vector3(z.x,0.14,z.z)
+    var outline := PackedVector2Array([Vector2(z.x-z.w/2,z.z-z.d/2),Vector2(z.x+z.w/2,z.z-z.d/2),Vector2(z.x+z.w/2,z.z+z.d/2),Vector2(z.x-z.w/2,z.z+z.d/2)])
+    kit.polygon(outline,0.075,"#9da49b",kit.concrete_material())
+    # Only small illustrative corner ticks, not solid yellow inventory islands.
     for side in [-1,1]:
-        kit.box(p+Vector3(0,0.18,side*z.d/2),Vector3(z.w,0.03,0.12),"#e3c770")
-        kit.box(p+Vector3(side*z.w/2,0.18,0),Vector3(0.12,0.03,z.d),"#e3c770")
+        for end in [-1,1]:
+            kit.box(Vector3(z.x+end*(z.w/2-0.7),0.15,z.z+side*z.d/2),Vector3(1.4,0.02,0.10),"#c7b477")
+            kit.box(Vector3(z.x+end*z.w/2,0.15,z.z+side*(z.d/2-0.7)),Vector3(0.10,0.02,1.4),"#c7b477")
     match z.kind:
         "trailers":
             for row in range(maxi(1,int(z.d/4))):
                 for col in range(maxi(1,int(z.w/6))):
                     var at := p+Vector3(-z.w/2+3+col*6,0,-z.d/2+2+row*4)
-                    kit.trailer(at,false,(row+col)%5==0)
-                    kit.box(at+Vector3(0,0.19,1.8),Vector3(5.2,0.02,0.08),"#eeebcf")
+                    kit.trailer(at,false,(row+col)%5==0,(row+col)%3==0)
         "frames":
             for row in range(maxi(1,int(z.d/3))):
                 for col in range(maxi(1,int(z.w/5))):
-                    for level in range(2): kit.trailer(p+Vector3(-z.w/2+2.5+col*5,level*0.18,-z.d/2+1.5+row*3),true)
+                    kit.frame_stack(p+Vector3(-z.w/2+2.0+col*5,0,-z.d/2+1.5+row*3),3+(row+col)%2)
         "containers":
             for row in range(maxi(1,int(z.d/5))):
                 for col in range(2):
@@ -134,13 +137,7 @@ func _infrastructure() -> void:
                 var point := a.lerp(b,float(i)/maxi(1,count))
                 kit.tree(Vector3(point.x,0,point.y),i+segment)
     for prop in site.props:
-        var at := Vector3(prop.point[0],0,prop.point[1])
-        match prop.kind:
-            "pallet":kit.pallet(at)
-            "truck":kit.truck(at)
-            "forklift":kit.forklift(at)
-            "steel":
-                for level in range(3): kit.box(at+Vector3(0,0.3+level*0.2,0),Vector3(5.5,0.14,1.2),"#657776")
+        kit.yard_prop(prop)
     # Lamps and small signs follow traced roads, not a rectangular invented grid.
     for index in [0,2,3,5]:
         var line: Dictionary = site.roads[index]
@@ -178,10 +175,13 @@ func _selectable(b: Dictionary) -> void:
     plaque.text = b.name.split(" · ")[0].to_upper()
     plaque.font_size = 42
     plaque.pixel_size = 0.017
-    plaque.position = Vector3(b.w/2+0.35,b.h-0.6,0)
-    plaque.rotation_degrees.y = 90
+    plaque.position = Vector3(b.get("front_sign",1.0)*(b.w/2+0.35),b.h-0.6,0)
+    plaque.rotation_degrees.y = b.get("front_sign",1.0)*90
     plaque.modulate = Color("#f1e7bd")
     plaque.outline_size = 7
+    # The video entry already has a small plate inside the brick arch; a large
+    # generic building caption here intersects the archivolt in close views.
+    plaque.visible = not b.get("arched_entry",false)
     body.add_child(plaque)
     var hit := CollisionShape3D.new()
     var shape := BoxShape3D.new()
@@ -250,6 +250,9 @@ func _update_camera() -> void:
                 var point := cam.unproject_position(body.position+Vector3(0,b.h/2,0))
                 pick_points[b.id] = [point.x,point.y]
         state["pick_points"] = pick_points
+        if version_panel != null:
+            var bounds := version_panel.get_global_rect()
+            state["version_bounds"] = [bounds.position.x,bounds.position.y,bounds.end.x,bounds.end.y]
         JavaScriptBridge.eval("window.factoryState="+JSON.stringify(state))
 
 func _panel(parent: Node, anchors: int, offsets: Vector4, color: Color) -> PanelContainer:
@@ -297,13 +300,14 @@ func _interface() -> void:
     _text(title,"АЛЯСКА  /  FACTORY ATLAS",23)
     _text(title,"01   ТЕРРИТОРИЯ И ЭКСТЕРЬЕР",12,Color("#d9bb6c"))
     _text(title,"Цифровой двойник · Красноярск",13)
-    var version := _panel(layer,Control.PRESET_TOP_RIGHT,Vector4(-266,20,-20,108),Color("#203940ed"))
+    var version := _panel(layer,Control.PRESET_TOP_RIGHT,Vector4(-306,20,-20,108),Color("#203940ed"))
+    version_panel = version
     var column := VBoxContainer.new()
     version.add_child(column)
-    _text(column,"BUILD "+site.build+"   /   MAP "+site.map_version,17)
+    _text(column,"BUILD "+site.build+"   /   MAP "+site.map_version,16)
     _text(column,"ПЛАНИРОВКА ПРЕДВАРИТЕЛЬНАЯ",11,Color("#e1bd6c"))
     _text(column,"Ориентация севера не подтверждена",11)
-    var tools := _panel(layer,Control.PRESET_BOTTOM_LEFT,Vector4(20,-126,485,-20),Color("#203940ed"))
+    var tools := _panel(layer,Control.PRESET_BOTTOM_LEFT,Vector4(20,-154,485,-20),Color("#203940ed"))
     tools_panel = tools
     var c := VBoxContainer.new()
     tools.add_child(c)
@@ -321,6 +325,10 @@ func _interface() -> void:
     _button(row2,"Названия [L]",func():label_mode=not label_mode;_update_camera())
     _button(row2,"Сдвиг [E]",func():_toggle_edit())
     _button(row2,"Восток [6]",func():_view(6))
+    var row3 := HBoxContainer.new()
+    c.add_child(row3)
+    _button(row3,"Человек / прицеп [7]",func():_view(7))
+    _button(row3,"Проход у офиса 1 [8]",func():_view(8))
     _text(c,"ПКМ: орбита   ·   СКМ / WASD: сдвиг   ·   колесо: масштаб",12)
     var info := _panel(layer,Control.PRESET_BOTTOM_RIGHT,Vector4(-418,-126,-20,-20),Color("#203940ed"))
     details_panel = info
@@ -338,6 +346,9 @@ func _view(index: int) -> void:
     current_view = index
     plan_overlay.visible = index == 5
     if index == 5: status.text = "План: красный — забор; зелёный — проезд\nЮжный перечёркнутый квартал исключён"
+    elif index == 7: status.text = "Ориентир: взрослый 1,75 м · прицеп ≈4,4 м\nГабариты изделий и высоты цехов оценочные"
+    elif index == 8: status.text = "Начальный участок вашей видеоэкскурсии\nФасады и оборудование — по видео, размеры оценочные"
+    else: status.text = "Выберите здание: габариты и источник\nЛюди и техника служат ориентирами масштаба"
     azimuth = 0.5
     elevation = 0.95
     match index:
@@ -347,6 +358,8 @@ func _view(index: int) -> void:
         4: focus=Vector3(-53,0,-1);distance=125;azimuth=0.35
         5: focus=Vector3(96,0,25);distance=325;azimuth=0;elevation=1.565
         6: focus=Vector3(193,0,52);distance=185;azimuth=0.35;elevation=0.95
+        7: focus=Vector3(16,2,-33);distance=32;azimuth=-1.25;elevation=0.30
+        8: focus=Vector3(-74,1,-12);distance=48;azimuth=-2.1;elevation=0.62
     _update_camera()
 
 func _toggle_edit() -> void:
@@ -369,7 +382,7 @@ func _unhandled_input(event: InputEvent) -> void:
             if not hit.is_empty():
                 selected = hit.collider
                 var b: Dictionary = selected.get_meta("data")
-                status.text = "%s\n%.1f × %.1f м · %s\nИсточник: %s" % [b.name,b.w,b.d,b.confidence,"2ГИС + ваша разметка" if b.id in ["red","lgc"] else "контур карты · оценка"]
+                status.text = "%s\n%.1f × %.1f м · %s\nСтена ≈%.1f м · высота оценочная" % [b.name,b.w,b.d,b.confidence,b.h]
                 _update_camera()
     if event is InputEventMouseMotion:
         if dragging:
@@ -380,7 +393,7 @@ func _unhandled_input(event: InputEvent) -> void:
             focus.y=0
         _update_camera()
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode in [KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6]: _view(event.keycode-KEY_1+1)
+        if event.keycode in [KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8]: _view(event.keycode-KEY_1+1)
         if event.keycode==KEY_L:label_mode=not label_mode;_update_camera()
         if event.keycode==KEY_F and selected!=null:focus=selected.position;distance=70;_update_camera()
         if event.keycode==KEY_E: _toggle_edit()

@@ -1,0 +1,27 @@
+{
+  "build": "1.2.0",
+  "map": "1.2.0",
+  "local_browser": "Chromium WebGL 2, SwiftShader",
+  "screenshots": [
+    "site-plan",
+    "full-site",
+    "lgc-construction",
+    "loading-yard",
+    "workshops",
+    "eastern-workshop",
+    "human-trailer-scale",
+    "office1-passage",
+    "office1-entry",
+    "labels",
+    "compact"
+  ],
+  "checks": [
+    "Godot import/runtime/mesh invariants",
+    "site/building/road/fence/stock/crane and new prop clearances",
+    "1.75 m actual adult mesh AABB and two full trailer envelopes",
+    "actual LGC picking and reversible one-metre sketch edit",
+    "office1 actual picking/focus/wheel zoom/orbit",
+    "BUILD/MAP panel inside viewport on all presets and 800x600"
+  ],
+  "published_verification": "Separate follow-up after deploy; not inferred from local screenshots"
+}

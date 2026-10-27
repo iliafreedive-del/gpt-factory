@@ -48,6 +48,20 @@ for b,poly in bodies:
             if inside(a,poly) or inside(c,poly):dist=0
             if dist<road['width']/2-0.15:road_conflicts.append((b['id'],road['id'],round(dist,2)));break
 assert not road_conflicts,('paved roads intersect buildings',road_conflicts)
+# New video-based stacks/cars must leave both the real footprints and traced
+# traffic lanes clear. Walking people are allowed to stand in a service lane.
+for prop in site['props']:
+    if 'w' not in prop or prop['kind']=='person':continue
+    angle=math.radians(prop.get('rotation',0));c,s=math.cos(angle),math.sin(angle)
+    ox,oz=prop.get('footprint_offset',[0,0])
+    descriptor=dict(prop,x=prop['point'][0]+ox*c+oz*s,z=prop['point'][1]-ox*s+oz*c)
+    poly=footprint(descriptor)
+    for b,pb in bodies:assert not overlap(poly,pb),('video prop inside building',prop['kind'],prop['point'],b['id'])
+    for road in site['roads']:
+        for a,b in zip(road['points'],road['points'][1:]):
+            distance=min(segment_distance(a,b,u,v) for u,v in edges(poly))
+            assert not inside(a,poly) and not inside(b,poly) and distance>=road['width']/2-0.10,('video prop blocks road',prop['kind'],prop['point'],road['id'])
+    for excluded in site['excluded_areas']:assert not overlap(poly,excluded['points']),('video prop in excluded neighbours',prop['point'])
 for road in site['roads']:
     for excluded in site['excluded_areas']:
         assert not any(inside(point,excluded['points']) for point in road['points']),(road['id'],'road enters excluded parcel')

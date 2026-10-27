@@ -13,6 +13,11 @@ const fs = require('fs');
   await page.goto(process.env.TARGET_URL || 'http://127.0.0.1:8765/',{waitUntil:'networkidle',timeout:120000});
   const expected=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data/site.json'),'utf8')).build;
   await page.waitForFunction(v=>window.factoryState?.build===v,expected,{timeout:120000});
+  async function checkVersionBounds(){
+    const bounds=await page.evaluate(()=>window.factoryState.version_bounds);
+    const viewport=page.viewportSize();
+    if(!bounds || bounds[0]<0 || bounds[1]<0 || bounds[2]>viewport.width || bounds[3]>viewport.height) throw new Error('BUILD/MAP panel clipped: '+JSON.stringify({bounds,viewport}));
+  }
   await page.keyboard.press('2');
   await page.waitForFunction(()=>window.factoryState?.view===2,{},{timeout:60000});
   const point=await page.evaluate(()=>window.factoryState.pick_points.lgc);
@@ -27,13 +32,37 @@ const fs = require('fs');
   await page.waitForFunction(x=>window.factoryState?.selected_x===x,originalX,{timeout:60000});
   await page.keyboard.press('e');
   console.log('PASS browser picking and reversible one-metre building edit');
-  for(const [key,name] of [['5','site-plan'],['1','full-site'],['2','lgc-construction'],['3','loading-yard'],['4','workshops'],['6','eastern-workshop']]) {
+  for(const [key,name] of [['5','site-plan'],['1','full-site'],['2','lgc-construction'],['3','loading-yard'],['4','workshops'],['6','eastern-workshop'],['7','human-trailer-scale'],['8','office1-passage']]) {
     await page.keyboard.press(key);
     await page.waitForFunction(v=>window.factoryState?.view===v,Number(key),{timeout:60000});
     await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,{},{timeout:120000});
+    await checkVersionBounds();
     await page.screenshot({path:path.join(out,name+'.png'),timeout:120000});
     console.log('CAPTURE',name,JSON.stringify(await page.evaluate(()=>({build:window.factoryState.build,map:window.factoryState.map,view:window.factoryState.view}))));
   }
+  // Inspect the video landmark at an actual human scale, using the same
+  // selection/focus/zoom/orbit controls exposed to the owner.
+  await page.keyboard.press('4');
+  await page.waitForFunction(()=>window.factoryState.view===4,null,{timeout:60000});
+  const office=await page.evaluate(()=>window.factoryState.pick_points.office1);
+  await page.mouse.click(office[0],office[1]);
+  await page.waitForFunction(()=>window.factoryState.selected==='office1',null,{timeout:60000});
+  await page.keyboard.press('f');
+  await page.waitForFunction(()=>window.factoryState.distance===70,null,{timeout:60000});
+  await page.mouse.move(700,450);
+  for(let i=0;i<9;i++) {
+    const before=await page.evaluate(()=>window.factoryState.distance);
+    await page.mouse.wheel(0,-120);
+    await page.waitForFunction(d=>window.factoryState.distance<d,before,{timeout:60000});
+  }
+  await page.mouse.move(600,450);
+  await page.mouse.down({button:'right'});
+  await page.mouse.move(900,350,{steps:12});
+  await page.mouse.up({button:'right'});
+  await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,null,{timeout:120000});
+  await checkVersionBounds();
+  await page.screenshot({path:path.join(out,'office1-entry.png'),timeout:120000});
+  console.log('CAPTURE office1-entry via actual picking, focus, zoom and orbit');
   await page.keyboard.press('1');await page.keyboard.press('l');
   await page.waitForFunction(()=>window.factoryState?.labels===true,{},{timeout:60000});
   await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,{},{timeout:120000});
@@ -41,6 +70,7 @@ const fs = require('fs');
   await page.setViewportSize({width:800,height:600});
   await page.waitForFunction(()=>window.factoryState.viewport_width===800,{},{timeout:60000});
   await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,{},{timeout:120000});
+  await checkVersionBounds();
   await page.screenshot({path:path.join(out,'compact.png'),timeout:120000});
   await browser.close();
   if(errors.length) throw new Error(errors.join('\n'));
