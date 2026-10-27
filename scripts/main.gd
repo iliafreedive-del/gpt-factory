@@ -33,6 +33,8 @@ func _ready() -> void:
         _selectable(b)
     for area in site.get("functional_areas",[]):
         _label(area.name,Vector3(area.point[0],7.0,area.point[1]),false)
+        labels[-1].set_meta("building_id",area.parent)
+        labels[-1].set_meta("functional_area",area.id)
     for zone in site.zones: _zone(zone)
     _infrastructure()
     kit.finish()
@@ -268,6 +270,11 @@ func _update_camera() -> void:
                 var point := cam.unproject_position(body.position+Vector3(0,b.h/2,0))
                 pick_points[b.id] = [point.x,point.y]
         state["pick_points"] = pick_points
+        var functional_positions := {}
+        for label in labels:
+            if label.has_meta("functional_area"):
+                functional_positions[label.get_meta("functional_area")] = [label.position.x,label.position.z]
+        state["functional_label_positions"] = functional_positions
         if version_panel != null:
             var bounds := version_panel.get_global_rect()
             state["version_bounds"] = [bounds.position.x,bounds.position.y,bounds.end.x,bounds.end.y]
