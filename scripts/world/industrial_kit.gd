@@ -14,7 +14,7 @@ func material(hex: String) -> StandardMaterial3D:
         m.albedo_color = Color(hex)
         m.roughness = 0.87
         m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-        if hex in ["#737f7c", "#c8c2a4", "#b9b9a4", "#c7c8b2"]:
+        if hex in ["#737f7c", "#c8c2a4", "#b9b9a4", "#c7c8b2", "#9da49b"]:
             var image := Image.create(64,64,false,Image.FORMAT_RGB8)
             var rng := RandomNumberGenerator.new()
             rng.seed = 1205

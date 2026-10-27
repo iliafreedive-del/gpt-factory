@@ -68,6 +68,8 @@ func _points(values: Array) -> PackedVector2Array:
 func _grounds() -> void:
     kit.board(_points(site.presentation_outline),3.8,"#b9bdac","#617573")
     for parcel in site.parcels: kit.polygon(_points(parcel.points),0.025,parcel.color)
+    for surface in site.get("surfaces",[]):
+        kit.polygon(_points(surface.points),0.045,surface.color)
     # The presentation board is cut away at the excluded southern neighbours;
     # the exclusion polygon is data for checks only, never a rendered quarter.
     for r in site.roads:

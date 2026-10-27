@@ -1,6 +1,6 @@
 # Alaska Factory — exterior atlas
 
-Godot **4.4.1**, GL Compatibility, Web. **BUILD 1.1.2 / MAP 1.1.1**.
+Godot **4.4.1**, GL Compatibility, Web. **BUILD 1.1.3 / MAP 1.1.2**.
 One world unit = one metre. Exterior only. Map-derived anchors and provisional estimates are kept separate; this is not a surveyed digital twin.
 
 ## Develop
