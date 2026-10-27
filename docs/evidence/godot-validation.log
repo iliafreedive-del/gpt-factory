@@ -15,5 +15,5 @@ Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
 
 Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
 
-PASS mesh invariants: outward roof normals, metric AABB, orthogonal rotated details; actual 1.75 m adult and both complete trailer envelopes
-PASS 16 rotated footprints; no building/road/fence/stock collisions; crane travel clear; exclusion clear; two-source calibration; shop-1 orientation and eastern footprint scale.
+PASS mesh invariants: metric roofs and human/vehicle scales; hipped slopes; concave roof area; real physics picking leaves recessed courtyard empty
+PASS 12 rotated footprints; no building/road/fence/stock collisions; crane travel clear; exclusion clear; two-source calibration; shop-1 orientation and eastern footprint scale.

@@ -1,7 +1,8 @@
 {
-  "build": "1.2.0",
-  "map": "1.2.0",
-  "local_browser": "Chromium WebGL 2, SwiftShader",
+  "build": "1.3.0",
+  "map": "1.3.0",
+  "local_browser": "Chromium WebGL 2 / SwiftShader",
+  "exit_code": 0,
   "screenshots": [
     "site-plan",
     "full-site",
@@ -11,17 +12,22 @@
     "eastern-workshop",
     "human-trailer-scale",
     "office1-passage",
+    "building-contours",
     "office1-entry",
     "labels",
     "compact"
   ],
   "checks": [
-    "Godot import/runtime/mesh invariants",
-    "site/building/road/fence/stock/crane and new prop clearances",
-    "1.75 m actual adult mesh AABB and two full trailer envelopes",
-    "actual LGC picking and reversible one-metre sketch edit",
-    "office1 actual picking/focus/wheel zoom/orbit",
-    "BUILD/MAP panel inside viewport on all presets and 800x600"
+    "Godot import/runtime/strict logs",
+    "Metric hipped roof and outward slopes",
+    "Concave roof area does not fill courtyard",
+    "Real physics picking hits solid shell and misses recessed court",
+    "12 nonrectangular/rotated building outlines with roads/fences/stock/props/exclusion clear",
+    "Functional labels inside parent shell",
+    "Actual LGC picking and reversible metre edit",
+    "Actual office1 picking/focus/wheel/orbit",
+    "Version panel stays inside viewport on presets and 800x600",
+    "Preset9 final framing keeps entire office visible"
   ],
-  "published_verification": "Separate follow-up after deploy; not inferred from local screenshots"
+  "published_verification": "Separate follow-up after deploy"
 }

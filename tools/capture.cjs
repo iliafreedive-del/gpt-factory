@@ -32,7 +32,7 @@ const fs = require('fs');
   await page.waitForFunction(x=>window.factoryState?.selected_x===x,originalX,{timeout:60000});
   await page.keyboard.press('e');
   console.log('PASS browser picking and reversible one-metre building edit');
-  for(const [key,name] of [['5','site-plan'],['1','full-site'],['2','lgc-construction'],['3','loading-yard'],['4','workshops'],['6','eastern-workshop'],['7','human-trailer-scale'],['8','office1-passage']]) {
+  for(const [key,name] of [['5','site-plan'],['1','full-site'],['2','lgc-construction'],['3','loading-yard'],['4','workshops'],['6','eastern-workshop'],['7','human-trailer-scale'],['8','office1-passage'],['9','building-contours']]) {
     await page.keyboard.press(key);
     await page.waitForFunction(v=>window.factoryState?.view===v,Number(key),{timeout:60000});
     await page.waitForFunction(()=>window.factoryFrame>window.factoryState.capture_frame+6,{},{timeout:120000});

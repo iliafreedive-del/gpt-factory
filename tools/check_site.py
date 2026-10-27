@@ -8,13 +8,31 @@ site=json.loads((Path(__file__).resolve().parents[1]/'data/site.json').read_text
 assert site['units']=='metres'
 def footprint(b):
     angle=math.radians(b.get('rotation',0));c,s=math.cos(angle),math.sin(angle)
-    return [(b['x']+x*c+z*s,b['z']-x*s+z*c) for x,z in [(-b['w']/2,-b['d']/2),(b['w']/2,-b['d']/2),(b['w']/2,b['d']/2),(-b['w']/2,b['d']/2)]]
+    points=b.get('outline',[(-b['w']/2,-b['d']/2),(b['w']/2,-b['d']/2),(b['w']/2,b['d']/2),(-b['w']/2,b['d']/2)])
+    return [(b['x']+x*c+z*s,b['z']-x*s+z*c) for x,z in points]
 def edges(poly):return list(zip(poly,poly[1:]+poly[:1]))
-def overlap(a,b):
+def convex_overlap(a,b):
     for p,q in edges(a)+edges(b):
         axis=(q[1]-p[1],p[0]-q[0]);aa=[x*axis[0]+y*axis[1] for x,y in a];bb=[x*axis[0]+y*axis[1] for x,y in b]
         if max(aa)<=min(bb)+0.01 or max(bb)<=min(aa)+0.01:return False
     return True
+
+def triangles(poly):
+    """Ear clipping keeps concave T-shaped courtyards out of collision checks."""
+    def turn(a,b,c):return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])
+    work=list(poly)
+    if sum(a[0]*b[1]-b[0]*a[1] for a,b in edges(work))<0:work.reverse()
+    result=[]
+    while len(work)>3:
+        for i,b in enumerate(work):
+            a,c=work[i-1],work[(i+1)%len(work)]
+            if turn(a,b,c)<=1e-8:continue
+            if any(all(turn(u,v,p)>=-1e-8 for u,v in [(a,b),(b,c),(c,a)]) for j,p in enumerate(work) if j not in [i,(i-1)%len(work),(i+1)%len(work)]):continue
+            result.append([a,b,c]);work.pop(i);break
+        else:raise AssertionError(('Invalid or self-intersecting building outline',poly))
+    result.append(work)
+    return result
+def overlap(a,b):return any(convex_overlap(ta,tb) for ta in triangles(a) for tb in triangles(b))
 
 def point_distance(p,a,b):
     dx,dy=b[0]-a[0],b[1]-a[1];length=dx*dx+dy*dy
@@ -87,6 +105,14 @@ scales=[a['pixels']/a['metres'] for a in site['anchors']]
 assert max(scales)/min(scales)<1.03,scales
 trace=site['trace'];assert abs(trace['warehouse_check']['px_per_m']/trace['lgc_check']['px_per_m']-1)<0.03
 by_id={b['id']:b for b in site['buildings']}
+assert len(by_id['shop2']['outline'])>=8,'Central shell must retain its stepped T-shaped contour'
+central=footprint(by_id['shop2'])
+assert not inside((-52,-17),central),'Recessed service court was filled by a bounding rectangle'
+assert inside((-57,-24),central) and not inside((-65,-24),central),'The small north step must not turn into a full-width extension'
+assert inside((-70,-18),central) and inside((-20,-4),central),'The stem and long central wing must both exist'
+assert by_id['shop1']['roof_type']=='hip','Western main roof must have hipped ends, not two gables'
+for area in site.get('functional_areas',[]):
+    assert inside(area['point'],footprint(by_id[area['parent']])),('Function label outside its physical shell',area['id'])
 assert abs(by_id['shop1']['rotation'])==90,'Shop 1 must follow the north/south building axis'
 assert by_id['black']['w']>2*by_id['lgc']['w'],'Black workshop scale must match the large eastern map footprint'
 assert not ids.intersection(['garage1','garage2','mini','parts','axes']),'Unsupported southern standalone buildings must not return'

@@ -1,6 +1,6 @@
 {
-  "build": "1.2.0",
-  "map_version": "1.2.0",
+  "build": "1.3.0",
+  "map_version": "1.3.0",
   "units": "metres",
   "orientation": "Screen-up follows supplied 2GIS / Excel; true north unverified",
   "trace": {
@@ -120,7 +120,7 @@
       "name": "Цех 1 · сварка / сборка",
       "x": -97.551,
       "z": -6.122,
-      "w": 44,
+      "w": 48,
       "d": 27,
       "h": 6.5,
       "style": "masonry",
@@ -128,7 +128,6 @@
       "rotation": -90,
       "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_bays": 2,
       "roof_color": "#87928b",
       "ribbon_faces": [
         "-z"
@@ -136,20 +135,129 @@
       "ribbon_y": 2.3,
       "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
       "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
+      "height_uncertainty_m": 1.0,
+      "roof_type": "hip",
+      "facade_name": false,
+      "outline": [
+        [
+          -26,
+          -10
+        ],
+        [
+          -22,
+          -10
+        ],
+        [
+          -22,
+          -13.5
+        ],
+        [
+          22,
+          -13.5
+        ],
+        [
+          22,
+          13.5
+        ],
+        [
+          -22,
+          13.5
+        ],
+        [
+          -22,
+          -4
+        ],
+        [
+          -26,
+          -4
+        ]
+      ],
+      "volumes": [
+        {
+          "outline": [
+            [
+              -22,
+              -13.5
+            ],
+            [
+              22,
+              -13.5
+            ],
+            [
+              22,
+              13.5
+            ],
+            [
+              -22,
+              13.5
+            ]
+          ],
+          "h": 6.5,
+          "color": "#c2c4b6",
+          "roof_color": "#87928b",
+          "roof_type": "hip",
+          "roof_w": 44.6,
+          "roof_d": 27.5,
+          "roof_rise": 2.5,
+          "facades": [
+            {
+              "a": [
+                -21,
+                -13.5
+              ],
+              "b": [
+                21,
+                -13.5
+              ],
+              "normal": [
+                0,
+                -1
+              ],
+              "windows": true,
+              "window_y": 2.3
+            }
+          ]
+        },
+        {
+          "outline": [
+            [
+              -26,
+              -10
+            ],
+            [
+              -22,
+              -10
+            ],
+            [
+              -22,
+              -4
+            ],
+            [
+              -26,
+              -4
+            ]
+          ],
+          "h": 4.3,
+          "color": "#b9bba9",
+          "roof_color": "#929b8c",
+          "roof_type": "flat"
+        }
+      ],
+      "shape_source": "Owner photographed 2GIS print and image(7): single hipped main roof, lower northern projection, adjoining southern office. Proportional tracing; roof rise and projection dimensions estimated.",
+      "shape_confidence": "ПО КАРТЕ · КОНТУР ОЦЕНОЧНЫЙ ±2 м"
     },
     {
       "id": "office1",
       "name": "Офис 1 · вход",
       "x": -97.551,
-      "z": 20.0,
+      "z": 19.689,
       "w": 26,
-      "d": 7,
+      "d": 7.622,
       "h": 3.6,
       "style": "office",
       "color": "#b8a38b",
       "rotation": 180,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; west-facing brick entrance from annotated image(7)",
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; west-facing brick entrance from annotated image(7); northern wall joins main shell at Z=15.878, shared wall without detached gap",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
       "arched_entry": true,
       "door_h": 2.1,
@@ -157,112 +265,202 @@
       "roof_color": "#969889",
       "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
       "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
+      "height_uncertainty_m": 1.0,
+      "adjoins": "shop1 south wall, no invented gap",
+      "roof_type": "hip",
+      "roof_rise": 0.6,
+      "shape_source": "Lower southern office wing and shallow hipped silhouette on owner 2GIS print; estimated pitch"
     },
     {
       "id": "shop2",
-      "name": "Цех 2 · сборка",
+      "name": "Цех 2 · сборка / малярка / офис 2",
       "x": -42.449,
       "z": -4.082,
-      "w": 47,
-      "d": 13,
+      "w": 68.255,
+      "d": 27.918,
       "h": 5.8,
       "style": "masonry",
       "color": "#c3c5b7",
       "rotation": 0,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
+      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC; physical contour now includes paint/sandblast/tent/office functions in one continuous building, not independent boxes",
       "confidence": "ПО КАРТЕ · ОЦЕНКА",
       "roof_type": "flat",
       "roof_color": "#a2a693",
-      "ribbon_faces": [
-        "-z",
-        "+z"
-      ],
       "ribbon_y": 1.9,
       "roof_weathering": true,
       "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
       "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
-    },
-    {
-      "id": "office2",
-      "name": "Офис 2 · продажи",
-      "x": -13.265,
-      "z": -4.082,
-      "w": 11,
-      "d": 13,
-      "h": 4,
-      "style": "office",
-      "color": "#c6c8b8",
-      "rotation": 0,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
-      "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_color": "#9ba28f",
-      "roof_weathering": true,
-      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
-      "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
-    },
-    {
-      "id": "blast",
-      "name": "Пескоструй",
-      "x": -71.02,
-      "z": -16.327,
-      "w": 10,
-      "d": 10,
-      "h": 5,
-      "style": "masonry",
-      "color": "#aaa993",
-      "rotation": 0,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
-      "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat",
-      "roof_color": "#949b8c",
-      "exhaust": true,
-      "roof_weathering": true,
-      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
-      "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
-    },
-    {
-      "id": "paint",
-      "name": "Малярка",
-      "x": -71.02,
-      "z": -4.082,
-      "w": 10,
-      "d": 13,
-      "h": 5.8,
-      "style": "masonry",
-      "color": "#c1c4b9",
-      "rotation": 0,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
-      "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "roof_type": "flat",
-      "roof_color": "#969f93",
-      "blue_lower": true,
-      "roof_weathering": true,
-      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
-      "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
-    },
-    {
-      "id": "awning",
-      "name": "Тентовый участок",
-      "x": -58.367,
-      "z": -18.082,
-      "w": 10,
-      "d": 15,
-      "h": 4,
-      "style": "awning",
-      "color": "#bfbca5",
-      "rotation": 0,
-      "source": "User annotated 2GIS correction: traced image coordinates; scale tied to 49m warehouse and 38m LGC",
-      "confidence": "ПО КАРТЕ · ОЦЕНКА",
-      "windows": false,
-      "roof_color": "#c1c0ab",
-      "exterior_source": "IMG_1890.mov, owner-anchored walkthrough from office 1 + archive exterior photo; qualitative appearance, facade assignment partly inferred",
-      "height_source": "Typological / visual estimate, not measured in video",
-      "height_uncertainty_m": 1.0
+      "height_uncertainty_m": 1.0,
+      "outline": [
+        [
+          -33.571,
+          -16.418
+        ],
+        [
+          -17.551,
+          -16.418
+        ],
+        [
+          -17.551,
+          -21.418
+        ],
+        [
+          -11.551,
+          -21.418
+        ],
+        [
+          -11.551,
+          -6.5
+        ],
+        [
+          34.684,
+          -6.5
+        ],
+        [
+          34.684,
+          6.5
+        ],
+        [
+          -33.571,
+          6.5
+        ]
+      ],
+      "volumes": [
+        {
+          "outline": [
+            [
+              -33.571,
+              -16.418
+            ],
+            [
+              -17.551,
+              -16.418
+            ],
+            [
+              -17.551,
+              -21.418
+            ],
+            [
+              -11.551,
+              -21.418
+            ],
+            [
+              -11.551,
+              -6.5
+            ],
+            [
+              34.684,
+              -6.5
+            ],
+            [
+              34.684,
+              6.5
+            ],
+            [
+              -33.571,
+              6.5
+            ]
+          ],
+          "h": 5.8,
+          "color": "#c3c5b7",
+          "roof_color": "#a2a693",
+          "roof_type": "flat",
+          "facades": [
+            {
+              "a": [
+                -33.571,
+                6.5
+              ],
+              "b": [
+                34.684,
+                6.5
+              ],
+              "normal": [
+                0,
+                1
+              ],
+              "windows": true
+            },
+            {
+              "a": [
+                -11.551,
+                -6.5
+              ],
+              "b": [
+                34.684,
+                -6.5
+              ],
+              "normal": [
+                0,
+                -1
+              ],
+              "windows": true
+            },
+            {
+              "a": [
+                -33.571,
+                -16.418
+              ],
+              "b": [
+                -33.571,
+                6.5
+              ],
+              "normal": [
+                -1,
+                0
+              ],
+              "blue_lower": true
+            }
+          ],
+          "portals": [
+            {
+              "point": [
+                -33.571,
+                0.0
+              ],
+              "normal": [
+                -1,
+                0
+              ],
+              "w": 3.8,
+              "h": 3.2,
+              "canopy": true
+            },
+            {
+              "point": [
+                34.684,
+                0.0
+              ],
+              "normal": [
+                1,
+                0
+              ],
+              "w": 1.1,
+              "h": 2.2,
+              "canopy": true
+            },
+            {
+              "point": [
+                -24.351,
+                6.5
+              ],
+              "normal": [
+                0,
+                1
+              ],
+              "w": 3.8,
+              "h": 3.6
+            }
+          ],
+          "exhaust_at": [
+            -26.971,
+            -17.418
+          ]
+        }
+      ],
+      "facade_name": false,
+      "shape_source": "Owner photographed 2GIS print + original image(6)/(7): continuous stepped T-shaped body; outline proportionally transferred to existing metre frame. Coordinates approximate, photographed print not metric rectification. Visual comparison revision: widened west/north head to about 22m; small 6m step belongs to its northern edge, not to the middle of the long wing.",
+      "shape_confidence": "ПО КАРТЕ · КОНТУР ОЦЕНОЧНЫЙ ±2 м"
     },
     {
       "id": "weldstore",
@@ -437,12 +635,12 @@
     },
     {
       "name": "Клиенты · выдача",
-      "x": -30.204,
+      "x": -23.2,
       "z": -14.694,
-      "w": 28,
+      "w": 21,
       "d": 5,
       "kind": "trailers",
-      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear",
+      "source": "Excel functional zone, estimated extent adjusted to keep owner-traced roads and crane travel clear; narrowed east of the 2GIS north-side building projection",
       "confidence": "ОЦЕНКА · не фактический инвентарный учёт",
       "paving": "concrete",
       "markings": "illustrative corner ticks, not observed painted boundary"
@@ -1771,6 +1969,14 @@
       "local_review": "handoff/video-reference/ROUTE.md",
       "owner_anchor": "Start at office 1, blue cross; walk around marked loop",
       "usage": "Exterior materials, relative silhouettes, human/vehicle scale; not surveyed metric camera tracking"
+    },
+    {
+      "id": "owner_printed_2gis_contours",
+      "received": "2026-10-27",
+      "binary_archived": false,
+      "source": "Inline photograph of printed 2GIS plan, supplied after BUILD 1.2.0",
+      "usage": "Western building silhouettes, continuous stepped central body and roof types. Perspective/sketch not a new metre ruler.",
+      "priority": "Latest owner shape correction; existing marked fences/roads and metre anchors retained"
     }
   ],
   "surfaces": [
@@ -1882,5 +2088,51 @@
     "car_length_m": 4.35,
     "source": "Illustrative familiar size references; Alaska trailer product dimensions and employee heights not supplied",
     "confidence": "ОЦЕНКА · ориентиры пропорций, не реальные замеры изделий"
-  }
+  },
+  "functional_areas": [
+    {
+      "id": "paint",
+      "name": "Малярка",
+      "parent": "shop2",
+      "point": [
+        -71.02,
+        -4.082
+      ],
+      "source": "Excel and original image(6)/(7) function labels; no distinct external building asserted",
+      "confidence": "Functional position approximate; no interior geometry"
+    },
+    {
+      "id": "blast",
+      "name": "Пескоструй",
+      "parent": "shop2",
+      "point": [
+        -72,
+        -17.5
+      ],
+      "source": "Excel and original image(6)/(7) function labels; no distinct external building asserted",
+      "confidence": "Functional position approximate; no interior geometry"
+    },
+    {
+      "id": "awning",
+      "name": "Тентовый участок",
+      "parent": "shop2",
+      "point": [
+        -66.5,
+        -17.5
+      ],
+      "source": "Excel and original image(6)/(7) function labels; no distinct external building asserted",
+      "confidence": "Functional position approximate; no interior geometry"
+    },
+    {
+      "id": "office2",
+      "name": "Офис 2 · продажи",
+      "parent": "shop2",
+      "point": [
+        -13.265,
+        -4.082
+      ],
+      "source": "Excel and original image(6)/(7) function labels; no distinct external building asserted",
+      "confidence": "Functional position approximate; no interior geometry"
+    }
+  ]
 }

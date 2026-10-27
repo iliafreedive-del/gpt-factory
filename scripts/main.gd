@@ -31,6 +31,8 @@ func _ready() -> void:
     for b in site.buildings:
         kit.building(b)
         _selectable(b)
+    for area in site.get("functional_areas",[]):
+        _label(area.name,Vector3(area.point[0],7.0,area.point[1]),false)
     for zone in site.zones: _zone(zone)
     _infrastructure()
     kit.finish()
@@ -152,6 +154,13 @@ func _plan_overlay() -> void:
     plan_overlay = Node3D.new()
     add_child(plan_overlay)
     var overlay_kit = Kit.new(plan_overlay)
+    for building in site.buildings:
+        var values: Array = building.get("outline",[[-building.w/2,-building.d/2],[building.w/2,-building.d/2],[building.w/2,building.d/2],[-building.w/2,building.d/2]])
+        var transform := Transform3D(Basis(Vector3.UP,deg_to_rad(float(building.get("rotation",0)))),Vector3(building.x,building.h+3,building.z))
+        for i in range(values.size()):
+            var a: Array = values[i]
+            var b: Array = values[(i+1)%values.size()]
+            overlay_kit.beam(transform*Vector3(a[0],0,a[1]),transform*Vector3(b[0],0,b[1]),0.20,"#afd3db")
     for fence in site.fences:
         var points := _points(fence)
         for i in range(points.size()-1):
@@ -181,14 +190,23 @@ func _selectable(b: Dictionary) -> void:
     plaque.outline_size = 7
     # The video entry already has a small plate inside the brick arch; a large
     # generic building caption here intersects the archivolt in close views.
-    plaque.visible = not b.get("arched_entry",false)
+    plaque.visible = b.get("facade_name",true) and not b.get("arched_entry",false)
     body.add_child(plaque)
-    var hit := CollisionShape3D.new()
-    var shape := BoxShape3D.new()
-    shape.size = Vector3(b.w,b.h,b.d)
-    hit.shape = shape
-    hit.position.y = b.h/2
-    body.add_child(hit)
+    if b.has("outline"):
+        for volume in b.get("volumes",[{"outline":b.outline,"h":b.h}]):
+            var hit := CollisionPolygon3D.new()
+            hit.polygon = _points(volume.outline)
+            hit.depth = volume.h
+            hit.rotation.x = PI/2
+            hit.position.y = volume.h/2
+            body.add_child(hit)
+    else:
+        var hit := CollisionShape3D.new()
+        var shape := BoxShape3D.new()
+        shape.size = Vector3(b.w,b.h,b.d)
+        hit.shape = shape
+        hit.position.y = b.h/2
+        body.add_child(hit)
     add_child(body)
     _label(b.name,Vector3(b.x,b.h+4,b.z),true,b.id in ["lgc","new","red","shop1","shop2","black","third"])
     labels[-1].set_meta("building_id",b.id)
@@ -327,8 +345,9 @@ func _interface() -> void:
     _button(row2,"Восток [6]",func():_view(6))
     var row3 := HBoxContainer.new()
     c.add_child(row3)
-    _button(row3,"Человек / прицеп [7]",func():_view(7))
-    _button(row3,"Проход у офиса 1 [8]",func():_view(8))
+    _button(row3,"Масштаб [7]",func():_view(7))
+    _button(row3,"Проход [8]",func():_view(8))
+    _button(row3,"Контуры [9]",func():_view(9))
     _text(c,"ПКМ: орбита   ·   СКМ / WASD: сдвиг   ·   колесо: масштаб",12)
     var info := _panel(layer,Control.PRESET_BOTTOM_RIGHT,Vector4(-418,-126,-20,-20),Color("#203940ed"))
     details_panel = info
@@ -344,8 +363,8 @@ func _interface() -> void:
 
 func _view(index: int) -> void:
     current_view = index
-    plan_overlay.visible = index == 5
-    if index == 5: status.text = "План: красный — забор; зелёный — проезд\nЮжный перечёркнутый квартал исключён"
+    plan_overlay.visible = index in [5,9]
+    if index in [5,9]: status.text = "Контуры корпусов — голубые · проезды — зелёные\nКрасное — ограждения; чужой квартал исключён"
     elif index == 7: status.text = "Ориентир: взрослый 1,75 м · прицеп ≈4,4 м\nГабариты изделий и высоты цехов оценочные"
     elif index == 8: status.text = "Начальный участок вашей видеоэкскурсии\nФасады и оборудование — по видео, размеры оценочные"
     else: status.text = "Выберите здание: габариты и источник\nЛюди и техника служат ориентирами масштаба"
@@ -360,6 +379,7 @@ func _view(index: int) -> void:
         6: focus=Vector3(193,0,52);distance=185;azimuth=0.35;elevation=0.95
         7: focus=Vector3(16,2,-33);distance=32;azimuth=-1.25;elevation=0.30
         8: focus=Vector3(-74,1,-12);distance=48;azimuth=-2.1;elevation=0.62
+        9: focus=Vector3(-25,0,-10);distance=125;azimuth=0;elevation=1.565
     _update_camera()
 
 func _toggle_edit() -> void:
@@ -393,7 +413,7 @@ func _unhandled_input(event: InputEvent) -> void:
             focus.y=0
         _update_camera()
     if event is InputEventKey and event.pressed and not event.echo:
-        if event.keycode in [KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8]: _view(event.keycode-KEY_1+1)
+        if event.keycode in [KEY_1,KEY_2,KEY_3,KEY_4,KEY_5,KEY_6,KEY_7,KEY_8,KEY_9]: _view(event.keycode-KEY_1+1)
         if event.keycode==KEY_L:label_mode=not label_mode;_update_camera()
         if event.keycode==KEY_F and selected!=null:focus=selected.position;distance=70;_update_camera()
         if event.keycode==KEY_E: _toggle_edit()

@@ -52,7 +52,64 @@ func _initialize() -> void:
             push_error("Trailer wheel intersects the local ground")
             quit(1)
             return
-    print("PASS mesh invariants: outward roof normals, metric AABB, orthogonal rotated details; actual 1.75 m adult and both complete trailer envelopes")
+    var shape_root := Node3D.new()
+    root.add_child(shape_root)
+    var shape_kit = load("res://scripts/world/industrial_kit.gd").new(shape_root)
+    shape_kit.hip_roof(Vector3.ZERO,44,27,2.5,"#87928b")
+    var hip: ArrayMesh = shape_root.get_child(0).mesh
+    for normal in hip.surface_get_arrays(0)[Mesh.ARRAY_NORMAL]:
+        if normal.y <= 0.1:
+            push_error("Hipped roof has an inward slope normal")
+            quit(1)
+            return
+    if not hip.get_aabb().size.is_equal_approx(Vector3(44,2.5,27)):
+        push_error("Hipped roof changed the metric envelope")
+        quit(1)
+        return
+    var outline := [[0,0],[6,0],[6,2],[2,2],[2,6],[0,6]]
+    shape_kit._outlined_volume({"outline":outline,"h":4,"color":"#c3c5b7"})
+    var roof_area := 0.0
+    for node in shape_root.get_children():
+        if not node is MeshInstance3D or node.mesh.get_aabb().position.y<4:continue
+        var vertices: PackedVector3Array = node.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+        for i in range(0,vertices.size(),3):
+            var triangle := PackedVector2Array()
+            for j in range(3):triangle.append(Vector2(vertices[i+j].x,vertices[i+j].z))
+            if Geometry2D.is_point_in_polygon(Vector2(4,4),triangle):
+                push_error("Polygonal roof filled the recessed courtyard")
+                quit(1)
+                return
+            roof_area += (vertices[i+1]-vertices[i]).cross(vertices[i+2]-vertices[i]).length()/2
+    if absf(roof_area-20.0)>0.001:
+        push_error("Concave roof area must be 20 m², not its 36 m² bounding box")
+        quit(1)
+        return
+    _collision_outline_check.call_deferred(outline)
+
+func _collision_outline_check(outline: Array) -> void:
+    var holder := Node3D.new()
+    holder.position = Vector3(400,0,400)
+    root.add_child(holder)
+    var body := StaticBody3D.new()
+    holder.add_child(body)
+    var hit := CollisionPolygon3D.new()
+    var points := PackedVector2Array()
+    for point in outline:points.append(Vector2(point[0],point[1]))
+    hit.polygon=points
+    hit.rotation.x=PI/2
+    hit.depth=4
+    hit.position.y=2
+    body.add_child(hit)
+    await physics_frame
+    await physics_frame
+    var space := holder.get_world_3d().direct_space_state
+    var solid := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(401,10,401),Vector3(401,-1,401)))
+    var court := space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(404,10,404),Vector3(404,-1,404)))
+    if solid.is_empty() or not court.is_empty():
+        push_error("Polygon selection must hit the building and leave the courtyard empty")
+        quit(1)
+        return
+    print("PASS mesh invariants: metric roofs and human/vehicle scales; hipped slopes; concave roof area; real physics picking leaves recessed courtyard empty")
     quit(0)
 
 func _batch_bounds(kit) -> AABB:

@@ -103,7 +103,9 @@ func building(b: Dictionary) -> void:
     var start_counts := {}
     for key in batches: start_counts[key] = batches[key].transforms.size()
     var child_start := root.get_child_count()
-    if b.style == "awning": _shelter(b)
+    if b.has("volumes"):
+        for volume in b.volumes: _outlined_volume(volume)
+    elif b.style == "awning": _shelter(b)
     else: _building_body(b)
 
     var ranges := {}
@@ -119,6 +121,100 @@ func building(b: Dictionary) -> void:
     for node in nodes: node.transform = world_transform*node.transform
     building_ranges[b.id] = {"ranges":ranges,"nodes":nodes}
 
+func hip_roof(center: Vector3, w: float, d: float, rise: float, color: String) -> void:
+    var run: float = minf(d/2,w/2)
+    var a := Vector3(-w/2,0,-d/2)
+    var b := Vector3(w/2,0,-d/2)
+    var c := Vector3(w/2,0,d/2)
+    var e := Vector3(-w/2,0,d/2)
+    var r := Vector3(-w/2+run,rise,0)
+    var s := Vector3(w/2-run,rise,0)
+    var st := SurfaceTool.new()
+    st.begin(Mesh.PRIMITIVE_TRIANGLES)
+    for face in [[a,r,s,b],[e,c,s,r],[e,r,a],[b,s,c]]:
+        var normal: Vector3 = (face[1]-face[0]).cross(face[2]-face[0]).normalized()
+        for i in range(1,face.size()-1):
+            for v in [face[0],face[i+1],face[i]]:
+                st.set_normal(normal)
+                st.add_vertex(v)
+    var node := MeshInstance3D.new()
+    node.mesh = st.commit()
+    node.position = center
+    var mat := material(color).duplicate() as StandardMaterial3D
+    mat.disable_receive_shadows = true
+    node.material_override = mat
+    root.add_child(node)
+    beam(center+r,center+s,0.09,"#acb5a8")
+    for corner in [a,b,c,e]:
+        beam(center+corner,center+(r if corner.x<0 else s),0.055,"#82989a")
+
+func _outlined_volume(v: Dictionary) -> void:
+    # A real polygonal shell: its recessed courtyard is empty geometry, not a
+    # painted rectangle. Faces, roof, selection and checks use the same trace.
+    var points := PackedVector2Array()
+    for point in v.outline: points.append(Vector2(point[0],point[1]))
+    var h: float = v.h
+    var color: String = v.color
+    var roof_color: String = v.get("roof_color","#979e91")
+    for expanded in Geometry2D.offset_polygon(points,0.18): polygon(expanded,0.12,"#8c9690")
+    for i in range(points.size()):
+        var a := Vector3(points[i].x,0,points[i].y)
+        var b := Vector3(points[(i+1)%points.size()].x,0,points[(i+1)%points.size()].y)
+        var mid := (a+b)/2
+        var angle: float = -atan2(b.z-a.z,b.x-a.x)
+        box(mid+Vector3(0,h/2,0),Vector3(a.distance_to(b)+0.10,h,0.14),color,Vector3(0,angle,0))
+        box(mid+Vector3(0,0.3,0),Vector3(a.distance_to(b)+0.12,0.6,0.18),"#858d81",Vector3(0,angle,0))
+        box(mid+Vector3(0,h-0.10,0),Vector3(a.distance_to(b)+0.12,0.18,0.23),"#d0d1c1",Vector3(0,angle,0))
+    if v.get("roof_type","flat") == "hip":
+        hip_roof(Vector3(v.get("roof_x",0),h,v.get("roof_z",0)),v.roof_w,v.roof_d,v.get("roof_rise",2.4),roof_color)
+    else:
+        material(roof_color).disable_receive_shadows = true
+        polygon(points,h+0.16,roof_color)
+        for i in range(points.size()):
+            var a := Vector3(points[i].x,h+0.24,points[i].y)
+            var b := Vector3(points[(i+1)%points.size()].x,h+0.24,points[(i+1)%points.size()].y)
+            beam(a,b,0.16,"#a8ad9d")
+    for facade in v.get("facades",[]): _traced_facade(facade,h)
+    for door in v.get("portals",[]): _traced_portal(door)
+    if v.has("exhaust_at"):
+        var at := Vector3(v.exhaust_at[0],0,v.exhaust_at[1])
+        box(at+Vector3(0,1.05,0),Vector3(1.4,2.1,1.3),"#a9a68a")
+        cylinder(at+Vector3(0,4.15,0),0.49,4.1,"#b8b291")
+        for y in [2.5,4.0,5.5]: cylinder(at+Vector3(0,y,0),0.54,0.09,"#c4c0a7")
+        pipe(at+Vector3(0,6.1,0),at+Vector3(0,h-0.4,1.5),0.40,"#b8b291")
+        for side in [-1,1]: box(at+Vector3(side*0.72,3.0,0),Vector3(0.07,6,0.07),"#8c9280")
+
+func _traced_facade(f: Dictionary, h: float) -> void:
+    var a := Vector3(f.a[0],0,f.a[1])
+    var b := Vector3(f.b[0],0,f.b[1])
+    var n := Vector3(f.normal[0],0,f.normal[1])
+    var tangent := (b-a).normalized()
+    var length := a.distance_to(b)
+    var angle: float = -atan2(tangent.z,tangent.x)
+    var rotation := Vector3(0,angle,0)
+    if f.get("blue_lower",false):
+        box((a+b)/2+n*0.13+Vector3(0,1.6,0),Vector3(length,3.0,0.08),"#7189a0",rotation)
+    for i in range(int(length/4)+1):
+        box(a+tangent*minf(i*4,length)+n*0.15+Vector3(0,h/2,0),Vector3(0.12,h,0.12),"#bbbfb0",rotation)
+    if f.get("windows",false):
+        var y: float = f.get("window_y",1.9)
+        var mid := (a+b)/2+n*0.18+Vector3(0,y,0)
+        box(mid,Vector3(length-1.0,1.05,0.12),"#dfdfcf",rotation)
+        box(mid+n*0.09,Vector3(length-1.15,0.85,0.08),"#6d8280",rotation)
+        for i in range(int((length-1)/1.45)):
+            box(a+tangent*(0.6+i*1.45)+n*0.27+Vector3(0,y,0),Vector3(0.06,0.95,0.06),"#c5c9b7",rotation)
+
+func _traced_portal(d: Dictionary) -> void:
+    var p := Vector3(d.point[0],0,d.point[1])
+    var n := Vector3(d.normal[0],0,d.normal[1])
+    var rotation := Vector3(0,atan2(n.x,n.z),0)
+    var w: float = d.w
+    var h: float = d.h
+    box(p+n*0.18+Vector3(0,h/2,0),Vector3(w+0.3,h+0.2,0.14),"#c0c4b5",rotation)
+    box(p+n*0.28+Vector3(0,h/2,0),Vector3(w,h,0.10),"#344a4e",rotation)
+    if d.get("canopy",false):
+        box(p+n*0.60+Vector3(0,h+0.3,0),Vector3(w+0.7,0.12,1.2),"#8d9486",rotation)
+
 func _building_body(b: Dictionary) -> void:
     var p := Vector3.ZERO
     var w: float = b.w
@@ -131,12 +227,14 @@ func _building_body(b: Dictionary) -> void:
     box(p+Vector3(0,0.15,0),Vector3(w+1.2,0.3,d+1.2),"#8c9690")
     box(p+Vector3(0,h/2,0),Vector3(w,h,d),color)
     box(p+Vector3(0,0.5,0),Vector3(w+0.1,0.8,d+0.1),"#7f8984")
-    if office or b.get("roof_type","") == "flat":
+    if (office and b.get("roof_type","") != "hip") or b.get("roof_type","") == "flat":
         box(p+Vector3(0,h+0.15,0),Vector3(w+0.5,0.3,d+0.5),b.get("roof_color","#6e7770"))
         for side in [-1,1]: box(p+Vector3(0,h+0.4,side*d/2),Vector3(w,0.5,0.18),color)
         for x in range(maxi(1,int(w/13))):
             box(p+Vector3(-w/2+5+x*13,h+0.4,0),Vector3(1.8,0.5,1.5),"#b6c1b4")
             box(p+Vector3(-w/2+5+x*13,h+0.7,0),Vector3(1.4,0.15,1.1),"#6e8585")
+    elif b.get("roof_type","") == "hip":
+        hip_roof(p+Vector3(0,h,0),w+0.5,d+0.35,b.get("roof_rise",0.7),b.get("roof_color","#969889"))
     else:
         var bays: int = b.get("roof_bays",1)
         var bay_depth: float = d/bays
